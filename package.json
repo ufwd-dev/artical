@@ -1,0 +1,22 @@
+{
+  "name": "ufwd-artical",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ufwd-dev/artical.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ufwd-dev/artical/issues"
+  },
+  "homepage": "https://github.com/ufwd-dev/artical#readme",
+  "dependencies": {
+    "ufwd-system": "git+https://github.com/ufwd-dev/system.git"
+  }
+}
