@@ -54,6 +54,17 @@ service:
 writer: 
 ==========================
 
+## POST /api/ufwd/writer/account/session
+登陆
+```
+{
+    name: string,
+    password: string
+}
+```
+## delete /api/ufwd/writer/account/session
+注销
+
 ## POST /api/ufwd/writer/artical
 创建一篇文章
 ```
