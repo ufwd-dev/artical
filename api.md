@@ -102,9 +102,6 @@ writer:
 {}
 ```
 
-## DELETE /api/ufwd/writer/artical/:articalId/category/:categoryId
-删除某个文章的分类信息
-
 app:
 ======================================
 
@@ -131,3 +128,48 @@ app:
 
 ## DELETE /api/ufwd/app/account/artical/:articalId/like
 删除自己对某篇文章的(点赞)
+
+#ADDED
+
+## DELETE /api/ufwd/writer/artical/:articalId/category/:categoryId
+删除某个文章的分类信息
+
+## POST  /api/ufwd/app/artical
+创建一篇文章
+```
+{
+    content: string,
+    abstract: string,
+    thumb: string,
+    published: tinyint(0, 1)
+}
+```
+
+## GET /api/ufwd/app/artical?keyword=string&published=tinyint&examine=boolean
+查看自己创建的所有文章
+
+## GET /api/ufwd/app/artical/:articalId
+查看自己创建的某篇文章
+
+## PUT /api/ufwd/app/artical/:articalId
+修改自己创建的某篇文章
+```
+{
+    content: string,
+    abstract: string,
+    thumb: string,
+    published: tinyint(0, 1)
+}
+```
+
+## DELETE /api/ufwd/app/artical/:articalId
+删除自己创建的某篇文章(未发布的可以删)
+
+## POST /api/ufwd/writer/app/:articalId/category/:categoryId
+给某篇文章分类
+```
+{}
+```
+
+## DELETE /api/ufwd/app/artical/:articalId/category/:categoryId
+删除某个文章的分类信息

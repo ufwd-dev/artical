@@ -10,7 +10,8 @@ module.exports = function* createClassification(req, res, next) {
 
 	const artical = yield Artical.findOne({
 		where: {
-			id: articalId
+			id: articalId,
+			published: 0
 		}
 	});
 
