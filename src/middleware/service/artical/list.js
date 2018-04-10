@@ -18,10 +18,10 @@ module.exports = function* getServiceArticalList(req, res, next) {
 	const include = query.include[0];
 
 	keyword ? (query.where.content = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
-	examine ? (query.where.examine = examine) : undefined;
-	favorite ? (include.where = {}, include.where.favorite = favorite) : undefined;
-	favorite && like ? (include.where.like = like) : undefined;
-	!favorite && like ? (include.where = {}, include.where.like = like) : undefined;
+	examine ? (query.where.examine = (examine === 'true' ? 1 : 0 )) : undefined;
+	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? 1 : 0)) : undefined;
+	favorite && like ? (include.where.like = (like === 'true' ? 1 : 0)) : undefined;
+	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? 1 : 0)) : undefined;
 
 	const articalList = yield Artical.findAll(query);
 

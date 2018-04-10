@@ -14,8 +14,6 @@ const Category = sequelize.define('ufwdCategory', {
 		type: Sequelize.TEXT,
 		allowNull: false
 	}
-}, {
-	paranoid: true
 });
 
 const Classification = sequelize.define('ufwdCategoryHasArtical', {

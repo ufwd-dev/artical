@@ -1,7 +1,5 @@
 'use strict';
 
-// require('./insert');
-
 const lemonitor = require('lemonitor-service');
 
 const UfwdAccount = lemonitor.sequelize.model('ufwdAccount');

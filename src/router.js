@@ -18,16 +18,6 @@ const {
 	getCategory,
 	updateCategory,
 	deleteCategory,
-	writerSignin,
-	isWriterSignedIn,
-	createArtical,
-	getOwnArticalList,
-	getOwnArtical,
-	updateOwnArtical,
-	deleteOwnArtical,
-	isPublished,
-	createClassification,
-	deletelassification,
 	getServiceArticalList,
 	getServiceArtical,
 	updateServiceArtical,
@@ -83,79 +73,6 @@ router.put('/api/ufwd/service/category/:categoryId', $testBody({
 
 router.delete('/api/ufwd/service/category/:categoryId', isAdminiSignedIn, getCategory, deleteCategory);
 
-router.post('/api/ufwd/writer/account/session', isAccountUnsignedIn, writerSignin);
-
-router.delete('/api/ufwd/writer/account/session', signOut);
-
-router.post('/api/ufwd/writer/artical', $testBody({
-	properties: {
-		content: {
-			type: 'string'
-		},
-		abstract: {
-			type: 'string'
-		},
-		thumb: {
-			type: 'string'
-		},
-		published: {
-			type: 'number',
-			minimum: 0,
-			maximum: 1,
-			multipleOf: 1
-		}
-	},
-	required: ['content', 'published'],
-	additionalProperties: false
-}), isWriterSignedIn, createArtical);
-
-router.get('/api/ufwd/writer/artical', $testQuery({
-	properties: {
-		keyword: {
-			type: 'string'
-		},
-		published: {
-			type: 'string',
-			pattern: '(^0$|^1$)'
-		},
-		examine: {
-			type: 'string',
-			pattern: '(^0$|^1$)'
-		}
-	},
-	additionalProperties: false
-}), isWriterSignedIn, getOwnArticalList);
-
-router.get('/api/ufwd/writer/artical/:articalId', isWriterSignedIn, getOwnArtical);
-
-router.put('/api/ufwd/writer/artical/:articalId', $testBody({
-	properties: {
-		content: {
-			type: 'string'
-		},
-		abstract: {
-			type: 'string'
-		},
-		thumb: {
-			type: 'string'
-		},
-		published: {
-			type: 'number',
-			minimum: 0,
-			maximum: 1,
-			multipleOf: 1
-		}
-	},
-	additionalProperties: false
-}), isWriterSignedIn, isPublished, updateOwnArtical);
-
-router.delete('/api/ufwd/writer/artical/:articalId', isWriterSignedIn, isPublished, deleteOwnArtical);
-
-router.post('/api/ufwd/writer/artical/:articalId/category/:categoryId', isWriterSignedIn, createClassification);
-
-router.delete('/api/ufwd/writer/artical/:articalId/category/:categoryId', isWriterSignedIn, deletelassification);
-
-
 router.get('/api/ufwd/service/artical', $testQuery({
 	properties: {
 		keyword: {
@@ -163,21 +80,21 @@ router.get('/api/ufwd/service/artical', $testQuery({
 		},
 		examine: {
 			type: 'string',
-			pattern: '(^0$|^1$)'
+			pattern: '^(true|false)$'
 		},
 		favorite: {
 			type: 'string',
-			pattern: '(^0$|^1$)'
+			pattern: '^(true|false)$'
 		},
 		like: {
 			type: 'string',
-			pattern: '(^0$|^1$)'
+			pattern: '^(true|false)$'
 		}
 	},
 	additionalProperties: false
 }), isAdminiSignedIn, getServiceArticalList);
 
-router.get('/api/ufwd/service/artical/:articalId', isWriterSignedIn, getServiceArtical);
+router.get('/api/ufwd/service/artical/:articalId', isAdminiSignedIn, getServiceArtical);
 
 router.put('/api/ufwd/service/artical/:articalId', $testBody({
 	properties: {
@@ -185,10 +102,8 @@ router.put('/api/ufwd/service/artical/:articalId', $testBody({
 			type: 'string'
 		},
 		examine: {
-			type: 'number',
-			minimum: 0,
-			maximum: 1,
-			multipleOf: 1
+			type: 'string',
+			pattern: '^(true|false)$'
 		}
 	},
 	required: ['examine', 'comments'],
@@ -206,11 +121,11 @@ router.get('/api/ufwd/app/artical', $testQuery({
 		},
 		favorite: {
 			type: 'string',
-			pattern: '(^0$|^1$)'
+			pattern: '^(true|false)$'
 		},
 		like: {
 			type: 'string',
-			pattern: '(^0$|^1$)'
+			pattern: '^(true|false)$'
 		}
 	},
 	additionalProperties: false
