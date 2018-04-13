@@ -3,13 +3,13 @@
 const {throwError} = require('error-standardize');
 
 module.exports = function* deleteLike(req, res, next) {
-	const artical = res.data();
+	const article = res.data();
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const accountId = req.session.accountId;
 
 	const like = yield AccountOperation.findOne({
 		where: {
-			articalId: artical.id,
+			articleId: article.id,
 			accountId,
 			like: 1
 		}

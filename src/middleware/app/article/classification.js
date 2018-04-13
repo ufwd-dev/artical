@@ -3,8 +3,8 @@
 const {throwError} = require('error-standardize');
 
 module.exports = function* getAccountClassification(req, res, next) {
-	const Classification = res.sequelize.model('ufwdCategoryHasArtical');
-	const Artical = res.sequelize.model('ufwdArtical');
+	const Classification = res.sequelize.model('ufwdCategoryHasArticle');
+	const Article = res.sequelize.model('ufwdArticle');
 	const Category = res.sequelize.model('ufwdCategory');
 	const categoryId = req.params.categoryId;
 
@@ -18,12 +18,12 @@ module.exports = function* getAccountClassification(req, res, next) {
 		throwError('The category is not existed.', 404);
 	}
 
-	const articalList = yield Classification.findAll({
+	const articleList = yield Classification.findAll({
 		where: {
 			categoryId
 		},
 		include: {
-			model: Artical,
+			model: Article,
 			where: {
 				published: 1,
 				examine: 1
@@ -31,11 +31,11 @@ module.exports = function* getAccountClassification(req, res, next) {
 		}
 	});
 
-	if (articalList.length === 0) {
-		throwError('The artical is not existed.', 404);
+	if (articleList.length === 0) {
+		throwError('The article is not existed.', 404);
 	}
 	
-	res.data(articalList);
+	res.data(articleList);
 
 	next();
 };

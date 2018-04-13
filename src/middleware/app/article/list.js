@@ -3,11 +3,11 @@
 const {throwError} = require('error-standardize');
 const Sequelize = require('sequelize');
 
-module.exports = function* getAccountArticalList(req, res, next) {
-	const Artical = res.sequelize.model('ufwdArtical');
+module.exports = function* getAccountArticleList(req, res, next) {
+	const Article = res.sequelize.model('ufwdArticle');
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const accountId = req. session.accountId;
-	const { keyword, favorite, like} = req.query;
+	const { keyword, favorite, like, channel} = req.query;
 
 	const query = {
 		where:{
@@ -20,18 +20,19 @@ module.exports = function* getAccountArticalList(req, res, next) {
 	};
 	const include = query.include[0];
 
-	keyword ? (query.where.content = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
+	keyword ? (query.where.title = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
 	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
 	favorite && like ? (include.where.like = (like === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
 	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
+	channel ? (query.where.channel = channel) : undefined;
 
-	const articalList = yield Artical.findAll(query);
+	const articleList = yield Article.findAll(query);
 
-	if (articalList.length === 0) {
-		throwError('The artical is not existed.', 404);
+	if (articleList.length === 0) {
+		throwError('The article is not existed.', 404);
 	}
 
-	res.data(articalList);
+	res.data(articleList);
 
 	next();
 };

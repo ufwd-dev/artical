@@ -1,21 +1,21 @@
 'use strict';
 
 module.exports = function* createFavorite(req, res, next) {
-	const artical = res.data();
+	const article = res.data();
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const accountId = req.session.accountId;
 	let operation;
 
 	operation = yield AccountOperation.find({
 		where: {
-			articalId: artical.id,
+			articleId: article.id,
 			accountId,
 		}
 	});
 
 	if (!operation) {
 		operation = yield AccountOperation.create({
-			articalId: artical.id,
+			articleId: article.id,
 			accountId
 		});
 	}

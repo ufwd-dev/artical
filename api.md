@@ -30,13 +30,13 @@ service:
 
 
 
-## GET /api/ufwd/service/artical?keyword=string&examine=boolean
+## GET /api/ufwd/service/article?keyword=string&examine=boolean
 查看所有的文章
 
-## GET /api/ufwd/service/artical/:articalId
+## GET /api/ufwd/service/article/:articleId
 查看某一篇文章
 
-## PUT /api/ufwd/service/artical/:articalId
+## PUT /api/ufwd/service/article/:articleId
 审核某一篇文章
 ```
 {
@@ -45,40 +45,40 @@ service:
 }
 ```
 
-## DELETE /api/ufwd/service/artical/:articalId
+## DELETE /api/ufwd/service/article/:articleId
 删除某一篇文章
 
-## GET /api/ufwd/service/category/:categoryId/artical
+## GET /api/ufwd/service/category/:categoryId/article
 获取某个分类的所有文章
 
 app:
 ======================================
 
-## GET /api/ufwd/app/artical?keyword=string&favorite=boolean&like=boolean
+## GET /api/ufwd/app/article?keyword=string&favorite=boolean&like=boolean&channel=int
 查看所有的文章
 
-## GET /api/ufwd/app/artical/:articalId
+## GET /api/ufwd/app/article/:articleId
 查看某一篇文章(题目，id)
 
-## GET /api/ufwd/app/artical/:articalId/content
+## GET /api/ufwd/app/article/:articleId/content
 查看某一篇文章(内容)
 
-## GET /api/ufwd/app/category/:categoryId/artical
+## GET /api/ufwd/app/category/:categoryId/article
 获取某个分类的所有文章
 
-## POST /api/ufwd/app/artical/:articalId/favorite
+## POST /api/ufwd/app/article/:articleId/favorite
 对某个文章进行操作(收藏)
 
-## POST /api/ufwd/app/artical/:articalId/like
+## POST /api/ufwd/app/article/:articleId/like
 对某个文章进行操作(收藏)
 
-## DELETE /api/ufwd/app/account/artical/:articalId/favorite
+## DELETE /api/ufwd/app/account/article/:articleId/favorite
 删除自己对某篇文章的(点赞)
 
-## DELETE /api/ufwd/app/account/artical/:articalId/like
+## DELETE /api/ufwd/app/account/article/:articleId/like
 删除自己对某篇文章的(点赞)
 
 #ADDED
 
-## DELETE /api/ufwd/writer/artical/:articalId/category/:categoryId
+## DELETE /api/ufwd/writer/article/:articleId/category/:categoryId
 删除某个文章的分类信息

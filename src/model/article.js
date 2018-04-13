@@ -5,7 +5,10 @@ const lemonitor = require('lemonitor-service');
 
 const sequelize = lemonitor.sequelize;
 
-const Artical = sequelize.define('ufwdArtical', {
+const Article = sequelize.define('ufwdArticle', {
+	title: {
+		type: Sequelize.STRING
+	},
 	content: {
 		type: Sequelize.TEXT
 	},
@@ -46,6 +49,9 @@ const Artical = sequelize.define('ufwdArtical', {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 		defaultValue: 0
+	},
+	channel: {
+		type: Sequelize.INTEGER
 	}
 }, {
 	paranoid: true
@@ -74,4 +80,4 @@ const AccountOperation = sequelize.define('ufwdAccountOperation', {
 	paranoid: true
 });
 
-module.exports = { Artical, AccountOperation };
+module.exports = { Article, AccountOperation };

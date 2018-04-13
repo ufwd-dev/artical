@@ -4,7 +4,8 @@ const path = require('path');
 const { appendEntry } = require('lemonitor-application');
 
 require('./src/model');
-require('express-handler-loader')('ufwd_artical', {
+
+require('express-handler-loader')('ufwd_article', {
 	pathname: path.resolve(__dirname, './src/middleware')
 });
 
@@ -15,5 +16,5 @@ appendEntry('bundle', path.resolve(__dirname, './app'));
 const service = require('lemonitor-service');
 
 service.extend((app) => {
-	app.use(router);
+	app.use('/api/ufwd', router);
 });

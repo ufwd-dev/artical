@@ -16,7 +16,7 @@ const Category = sequelize.define('ufwdCategory', {
 	}
 });
 
-const Classification = sequelize.define('ufwdCategoryHasArtical', {
+const Classification = sequelize.define('ufwdCategoryHasArticle', {
 
 }, {
 	paranoid: true

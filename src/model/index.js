@@ -4,21 +4,21 @@ const lemonitor = require('lemonitor-service');
 
 const UfwdAccount = lemonitor.sequelize.model('ufwdAccount');
 
-const { Artical, AccountOperation } = require('./artical');
+const { Article, AccountOperation } = require('./article');
 const { Category, Classification } = require('./category');
 
-Artical.belongsTo(UfwdAccount, {
+Article.belongsTo(UfwdAccount, {
 	foreignKey: 'author'
 });
-UfwdAccount.hasMany(Artical, {
+UfwdAccount.hasMany(Article, {
 	foreignKey: 'author'
 });
 
-Artical.hasMany(AccountOperation, {
-	foreignKey: 'articalId'
+Article.hasMany(AccountOperation, {
+	foreignKey: 'articleId'
 });
-AccountOperation.belongsTo(Artical, {
-	foreignKey: 'articalId'
+AccountOperation.belongsTo(Article, {
+	foreignKey: 'articleId'
 });
 
 UfwdAccount.hasMany(AccountOperation, {
@@ -35,9 +35,9 @@ Classification.belongsTo(Category, {
 	foreignKey: 'categoryId'
 });
 
-Artical.hasMany(Classification, {
-	foreignKey: 'articalId'
+Article.hasMany(Classification, {
+	foreignKey: 'articleId'
 });
-Classification.belongsTo(Artical, {
-	foreignKey: 'articalId'
+Classification.belongsTo(Article, {
+	foreignKey: 'articleId'
 });

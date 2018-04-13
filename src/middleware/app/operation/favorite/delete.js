@@ -3,13 +3,13 @@
 const {throwError} = require('error-standardize');
 
 module.exports = function* deleteFavorite(req, res, next) {
-	const artical = res.data();
+	const article = res.data();
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const accountId = req.session.accountId;
 
 	const favorite = yield AccountOperation.findOne({
 		where: {
-			articalId: artical.id,
+			articleId: article.id,
 			accountId,
 			favorite: 1
 		}
