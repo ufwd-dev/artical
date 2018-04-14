@@ -123,7 +123,7 @@ router.post('/writer', $testBody({
 		}
 	},
 	additionalProperties: false,
-	required: ['accountId', 'channelId']
+	required: ['accountName', 'channelName']
 }), isAdminiSignedIn, createWriter);
 
 router.get('/writer', $testQuery({

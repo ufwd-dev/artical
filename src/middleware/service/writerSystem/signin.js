@@ -23,11 +23,7 @@ module.exports = function* writerSignin(req, res, next) {
 		throwError('No Authority', 404);
 	}
 
-
-	req.session.accountId = account.id;
-	req.session.writer = writer.id;
-	
-	res.data(writer);
+	res.data(account);
 
 	next();
 };

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ufwd-dev/artical#readme",
   "dependencies": {
+    "lemonitor-application": "^0.1.1",
     "ufwd-system": "git+https://github.com/ufwd-dev/system.git"
   }
 }

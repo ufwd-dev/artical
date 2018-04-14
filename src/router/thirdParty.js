@@ -2,7 +2,8 @@
 
 const {
 	isAccountUnsignedIn,
-	signIn
+	signIn,
+	getAccountByToken
 } = require('express-handler-loader')('all');
 
 const {
@@ -26,7 +27,7 @@ router.post('/account/session', isAccountUnsignedIn, signIn, writerSignin);
 
 router.delete('/account/session', writerSignout);
 
-router.post('/article', isWriterSignedIn, createArticle);
+router.post('/article', getAccountByToken, isWriterSignedIn, createArticle);
 
 router.get('/article', isWriterSignedIn, getOwnArticleList);
 
