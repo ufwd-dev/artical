@@ -20,7 +20,6 @@ const Article = sequelize.define('ufwdArticle', {
 	},
 	examine: {
 		type: Sequelize.TINYINT,
-		defaultValue: 0,
 		set(examine) {
 			examine === 'true' ? this.setDataValue('examine', 1) : this.setDataValue('examine', 0);
 		},

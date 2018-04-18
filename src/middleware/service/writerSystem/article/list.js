@@ -5,11 +5,20 @@ const Sequelize = require('sequelize');
 
 module.exports = function* getOwnArticleList(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
-	const writerId = req.session.accountId;
+	const Writer = res.sequelize.model('ufwdWriter');
+	const writerId = req.session.writer;
+
+	const writer = yield Writer.findOne({
+		where: {
+			id: writerId
+		}
+	});
+
 	const { keyword, examine, published} = req.query;
 	const query = {
 		where:{
-			author: writerId,
+			author: writer.accountId,
+			channel: writer.channelId
 		}
 	};
 

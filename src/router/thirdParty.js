@@ -29,16 +29,16 @@ router.delete('/account/session', writerSignout);
 
 router.post('/article', getAccountByToken, isWriterSignedIn, createArticle);
 
-router.get('/article', isWriterSignedIn, getOwnArticleList);
+router.get('/article', getAccountByToken, isWriterSignedIn, getOwnArticleList);
 
-router.get('/article/:articleId', isWriterSignedIn, getOwnArticle);
+router.get('/article/:articleId', getAccountByToken, isWriterSignedIn, getOwnArticle);
 
-router.put('/article/:articleId', isWriterSignedIn, isPublished, updateOwnArticle);
+router.put('/article/:articleId', getAccountByToken, isWriterSignedIn, isPublished, updateOwnArticle);
 
-router.delete('/article/:articleId', isWriterSignedIn, isPublished, deleteOwnArticle);
+router.delete('/article/:articleId', getAccountByToken, isWriterSignedIn, isPublished, deleteOwnArticle);
 
-router.post('/article/:articleId/category/:categoryId', isWriterSignedIn, createClassification);
+router.post('/article/:articleId/category/:categoryId', getAccountByToken, isWriterSignedIn, createClassification);
 
-router.delete('/article/:articleId/category/:categoryId', isWriterSignedIn, deletelassification);
+router.delete('/article/:articleId/category/:categoryId', getAccountByToken, isWriterSignedIn, deletelassification);
 
-router.get('/category/:categoryId/article', isWriterSignedIn, getArticleListOfCategory);
+router.get('/category/:categoryId/article', getAccountByToken, isWriterSignedIn, getArticleListOfCategory);

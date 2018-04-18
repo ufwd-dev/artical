@@ -2,8 +2,17 @@
 
 module.exports = function* updateServiceArticle(req, res, next) {
 	const article = res.data();
+	const { examine } = req.body;
 
-	const result = yield article.update(req.body);
+	let result = yield article.update(req.body);
+
+	if (examine === 'false') {
+		
+		result = yield article.update({
+			published: 'false'
+		});
+	}
+
 	res.data(result);
 
 	next();
