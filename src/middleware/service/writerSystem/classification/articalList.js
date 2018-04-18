@@ -8,6 +8,7 @@ module.exports = function* getArticleListOfCategory(req, res, next) {
 	const Category = res.sequelize.model('ufwdCategory');
 	const categoryId = req.params.categoryId;
 	const accountId = req.session.accountId;
+	const channelId = req.session.channel;
 
 	const category = yield Category.findOne({
 		where: {
@@ -26,7 +27,8 @@ module.exports = function* getArticleListOfCategory(req, res, next) {
 		include: [{
 			model: Article,
 			where: {
-				author: accountId
+				author: accountId,
+				channel: channelId
 			}
 		}]
 	});

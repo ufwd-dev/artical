@@ -10,7 +10,7 @@ module.exports = function* isWriterSignedIn(req, res, next) {
 		throwError('No account signed in.', 403);
 	}
 
-	if (!req.session.writer) {
+	if (!req.session.writer || !req.session.channel) {
 
 		const writer = yield Writer.findOne({
 			where: {
@@ -23,6 +23,7 @@ module.exports = function* isWriterSignedIn(req, res, next) {
 		}
 
 		req.session.writer = writer.id;
+		req.session.channel = writer.channelId;
 	}
 
 	next();
