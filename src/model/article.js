@@ -19,27 +19,11 @@ const Article = sequelize.define('ufwdArticle', {
 		type: Sequelize.STRING
 	},
 	examine: {
-		type: Sequelize.TINYINT,
-		set(examine) {
-			examine === 'true' ? this.setDataValue('examine', 1) : this.setDataValue('examine', 0);
-		},
-		get() {
-			const examine = this.getDataValue('examine');
-
-			return examine === 1 ? true : false;
-		}
+		type: Sequelize.BOOLEAN,
 	},
 	published: {
-		type: Sequelize.TINYINT,
-		defaultValue: 0,
-		set(published) {
-			published === 'true' ? this.setDataValue('published', 1) : this.setDataValue('published', 0);
-		},
-		get() {
-			const published = this.getDataValue('published');
-
-			return published === 1 ? true : false;
-		}
+		type: Sequelize.BOOLEAN,
+		defaultValue: false,
 	},
 	comments: {
 		type: Sequelize.TEXT
@@ -58,22 +42,12 @@ const Article = sequelize.define('ufwdArticle', {
 
 const AccountOperation = sequelize.define('ufwdAccountOperation', {
 	favorite: {
-		type: Sequelize.TINYINT,
-		defaultValue: 0,
-		get() {
-			const favorite = this.getDataValue('favorite');
-
-			return favorite === 1 ? true : false;
-		}
+		type: Sequelize.BOOLEAN,
+		defaultValue: false
 	},
 	like: {
-		type: Sequelize.TINYINT,
-		defaultValue: 0,
-		get() {
-			const like = this.getDataValue('like');
-
-			return like === 1 ? true : false;
-		}
+		type: Sequelize.BOOLEAN,
+		defaultValue: false
 	}
 }, {
 	paranoid: true

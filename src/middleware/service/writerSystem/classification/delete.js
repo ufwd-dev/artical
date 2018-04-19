@@ -14,7 +14,7 @@ module.exports = function* deletelassification(req, res, next) {
 		include: [{
 			model: Article,
 			where: {
-				published: 0
+				published: false
 			}
 		}]
 	});

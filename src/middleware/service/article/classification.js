@@ -25,7 +25,7 @@ module.exports = function* getServiceClassification(req, res, next) {
 		include: [{
 			model: Article,
 			where: {
-				published: 1
+				published: true
 			}
 		}]
 	});

@@ -13,7 +13,7 @@ module.exports = function* isPublished(req, res, next) {
 			id: articleId,
 			author: writerId,
 			channel: channelId,
-			published: 0
+			published: false
 		}
 	});
 

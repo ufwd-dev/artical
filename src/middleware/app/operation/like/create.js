@@ -22,7 +22,7 @@ module.exports = function* createLike(req, res, next) {
 	}
 
 	const like = yield operation.update({
-		like: 1
+		like: true
 	});
 
 	res.data(like);

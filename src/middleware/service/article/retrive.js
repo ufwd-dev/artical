@@ -9,7 +9,7 @@ module.exports = function* getServiceArticle(req, res, next) {
 	const article = yield Article.findOne({
 		where: {
 			id: articleId,
-			published: 1
+			published: true
 		}
 	});
 

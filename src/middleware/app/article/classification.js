@@ -25,8 +25,8 @@ module.exports = function* getAccountClassification(req, res, next) {
 		include: {
 			model: Article,
 			where: {
-				published: 1,
-				examine: 1
+				published: true,
+				examine: true
 			}
 		}
 	});

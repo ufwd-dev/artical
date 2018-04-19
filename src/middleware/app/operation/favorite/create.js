@@ -21,7 +21,7 @@ module.exports = function* createFavorite(req, res, next) {
 	}
 
 	const favorite = yield operation.update({
-		favorite: 1
+		favorite: true
 	});
 
 	res.data(favorite);

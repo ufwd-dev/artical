@@ -11,7 +11,7 @@ module.exports = function* deleteFavorite(req, res, next) {
 		where: {
 			articleId: article.id,
 			accountId,
-			favorite: 1
+			favorite: true
 		}
 	});
 
@@ -20,7 +20,7 @@ module.exports = function* deleteFavorite(req, res, next) {
 	}
 
 	const result = yield favorite.update({
-		favorite: 0
+		favorite: false
 	});
 
 	res.data(result);

@@ -6,10 +6,10 @@ module.exports = function* updateServiceArticle(req, res, next) {
 
 	let result = yield article.update(req.body);
 
-	if (examine === 'false') {
+	if (!examine) {
 		
 		result = yield article.update({
-			published: 'false'
+			published: false
 		});
 	}
 

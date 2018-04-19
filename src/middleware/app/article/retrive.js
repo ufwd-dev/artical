@@ -9,8 +9,8 @@ module.exports = function* getAccountArticle(req, res, next) {
 	const article = yield Article.findOne({
 		where: {
 			id: articleId,
-			published: 1,
-			examine: 1
+			published: true,
+			examine: true
 		}
 	});
 

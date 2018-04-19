@@ -101,8 +101,7 @@ router.put('/article/:articleId', $testBody({
 			type: 'string'
 		},
 		examine: {
-			type: 'string',
-			pattern: '^(true|false)$'
+			type: 'boolean'
 		}
 	},
 	required: ['examine', 'comments'],

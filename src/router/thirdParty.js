@@ -1,7 +1,6 @@
 'use strict';
 
 const {
-	isAccountSignedIn,
 	signIn,
 } = require('express-handler-loader')('all');
 

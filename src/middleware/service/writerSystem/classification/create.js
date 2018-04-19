@@ -11,7 +11,7 @@ module.exports = function* createClassification(req, res, next) {
 	const article = yield Article.findOne({
 		where: {
 			id: articleId,
-			published: 0
+			published: false
 		}
 	});
 

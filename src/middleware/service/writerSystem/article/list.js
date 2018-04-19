@@ -17,8 +17,8 @@ module.exports = function* getOwnArticleList(req, res, next) {
 	};
 
 	keyword ? (query.where.title = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
-	examine ? (query.where.examine = (examine === 'true' ? 1 : 0)) : undefined;
-	published ? (query.where.published = (published === 'true' ? 1 : 0)) : undefined;
+	examine ? (query.where.examine = (examine === 'true' ? true : false)) : undefined;
+	published ? (query.where.published = (published === 'true' ? true : false)) : undefined;
 
 	const articleList = yield Article.findAll(query);
 

@@ -11,7 +11,7 @@ module.exports = function* deleteLike(req, res, next) {
 		where: {
 			articleId: article.id,
 			accountId,
-			like: 1
+			like: true
 		}
 	});
 
@@ -20,7 +20,7 @@ module.exports = function* deleteLike(req, res, next) {
 	}
 
 	const result = yield like.update({
-		like: 0
+		like: false
 	});
 
 	res.data(result);

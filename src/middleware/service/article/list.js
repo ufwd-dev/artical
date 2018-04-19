@@ -9,7 +9,7 @@ module.exports = function* getServiceArticleList(req, res, next) {
 	const { keyword, examine, favorite, like} = req.query;
 	const query = {
 		where:{
-			published: 1
+			published: true
 		},
 		include: [{
 			model: AccountOperation,
@@ -18,10 +18,10 @@ module.exports = function* getServiceArticleList(req, res, next) {
 	const include = query.include[0];
 
 	keyword ? (query.where.title = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
-	examine ? (query.where.examine = (examine === 'true' ? 1 : 0 )) : undefined;
-	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? 1 : 0)) : undefined;
-	favorite && like ? (include.where.like = (like === 'true' ? 1 : 0)) : undefined;
-	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? 1 : 0)) : undefined;
+	examine ? (query.where.examine = (examine === 'true' ? true : false )) : undefined;
+	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? true : false)) : undefined;
+	favorite && like ? (include.where.like = (like === 'true' ? true : false)) : undefined;
+	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? true : false)) : undefined;
 
 	const articleList = yield Article.findAll(query);
 

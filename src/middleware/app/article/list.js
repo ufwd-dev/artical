@@ -11,8 +11,8 @@ module.exports = function* getAccountArticleList(req, res, next) {
 
 	const query = {
 		where:{
-			published: 1,
-			examine: 1
+			published: true,
+			examine: true
 		},
 		include: [{
 			model: AccountOperation,
@@ -21,9 +21,9 @@ module.exports = function* getAccountArticleList(req, res, next) {
 	const include = query.include[0];
 
 	keyword ? (query.where.title = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
-	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
-	favorite && like ? (include.where.like = (like === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
-	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? 1 : 0), include.accountId = accountId) : undefined;
+	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? true : false), include.accountId = accountId) : undefined;
+	favorite && like ? (include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
+	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
 	channel ? (query.where.channel = channel) : undefined;
 
 	const articleList = yield Article.findAll(query);
