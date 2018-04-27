@@ -1,6 +1,6 @@
-ufwd:
-  article: 'Article'
+article:
+  menu: 'Article'
 
-item:
-  all: 'All'
-  category: 'Category'
+  group:
+    article: 'Article'
+    category: 'Category'
