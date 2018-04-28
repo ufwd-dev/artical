@@ -1,7 +1,7 @@
 'use strict';
 
 const {
-	signIn,
+	signIn
 } = require('express-handler-loader')('all');
 
 const {
@@ -16,10 +16,13 @@ const {
 	isPublished,
 	createClassification,
 	deletelassification,
-	getArticleListOfCategory
+	getArticleListOfCategory,
+	getWriterByToken
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
+
+router.use(getWriterByToken);
 
 router.post('/account/session', signIn, writerSignin);
 

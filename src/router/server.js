@@ -114,15 +114,15 @@ router.get('/category/:categoryId/article', isAdminiSignedIn, getServiceClassifi
 
 router.post('/writer', $testBody({
 	properties: {
-		accountName: {
-			type: 'string'
+		accountId: {
+			type: 'number'
 		},
-		channelName: {
-			type: 'string'
+		channelId: {
+			type: 'number'
 		}
 	},
 	additionalProperties: false,
-	required: ['accountName', 'channelName']
+	required: ['accountId', 'channelId']
 }), isAdminiSignedIn, createWriter);
 
 router.get('/writer', $testQuery({
