@@ -1,68 +1,83 @@
 <template>
 
 <div>
-	<nav>
-		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item">
-				<router-link tag="a" to="/">Home</router-link>
-			</li>
-			<li class="breadcrumb-item active">Article</li>
-		</ol>
-	</nav>
+	<el-breadcrumb class="mb-4">
+		<el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+		<el-breadcrumb-item>Article</el-breadcrumb-item>
+	</el-breadcrumb>
 
 	<div class="row">
-		<div class="col-8">
-			<div class="input-group">
-				<input type="text" class="form-control">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary"
-						type="button"><i class="fa fa-search"></i></button>
-				</div>
-			</div>
-
-			<h3 class="mt-4">The articles of {{categoryName}}</h3>
+		<div class="col-sm-8">
+			<h3 class="">The articles of {{categoryName}}</h3>
 			<hr>
-			
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Keywords</th>
-						<th>Examine status</th>
-						<th>Created time</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="(article, index) in articleList"
-						:key="index"
-						@click="getArticleById(article.articalId)">
-						<td>{{article.title}}</td>
-						<td>{{article.keyword}}</td>
-						<td>{{article.examine}}</td>
-						<td>{{article.created_at}}</td>
-					</tr>
-				</tbody>
-			</table>
+
+			<data-tables
+				:data="articleList"
+				:search-def="searchDef"
+				:pagination-def="paginationDef"
+				:col-not-row-click="disabledClickLabelList">
+				<el-table-column
+					label="Examine status"
+					prop="status"
+					width="140"
+					align="center"
+					:filters="[
+						{text: 'Adopt', value: 'Adopt'},
+						{text: 'Fail', value: 'Fail'}]"
+					:filter-method="filterTag"
+					filter-placement="bottom-end">
+					<template slot-scope="scope">
+						<el-tag
+							:type="scope.row.examine === 'Adopt' ? 'success' : 'danger'"
+							close-transion>{{scope.row.examine}}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column
+					v-for="(column, index) in articleColumns"
+					:key="index"
+					align="center"
+					:label="column.label"
+					:prop="column.field"
+					:sortable="column.sortable"
+					:width="column.width">
+				</el-table-column>
+				<el-table-column
+					label="View"
+					prop="view"
+					align="center">
+					<template slot-scope="scope">
+						<el-button
+							type="text"
+							@click.native.prevent="getArticleById(scope.row.id)"><i
+								class="fa fa-file-text-o"></i>
+						</el-button>
+					</template>
+				</el-table-column>
+			</data-tables>
 		</div>
 
-		<div class="col-4">
-			<div class="list-group">
-				<div class="list-group-item disabled">Category
-					<router-link tag="a"
-						to="/ufwd/article/category"
-						class="float-right">Manage</router-link>
+		<div class="col-sm-4">
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>Category</span>
+					<el-button type="text"
+						class="pull-right"
+						style="padding: 3px 0;">Manage</el-button>
 				</div>
-				<a @click="categoryName = 'All'"
-					class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">All<span
-						class="badge badge-primary">{{articleNumberOfCategory}}</span>
-				</a>
-				<a @click="selectCategory(index)"
-					v-for="(category, index) in categoryList"
-					:key="index"
-					class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">{{category.name}}<span
-						class="badge badge-primary">{{articleNumberOfCategory}}</span>
-				</a>
-			</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item list-group-item-action clearfix">
+						<a href="">All</a>
+						<span class="badge badge-primary pull-right">0</span>
+					</li>
+					<li class="list-group-item"
+						v-for="(category, index) in categoryList"
+						:key="index">
+						<a href="">{{category.name}}</a>
+						<span class="badge badge-primary pull-right">{{articleNumberOfCategory}}</span>
+					</li>
+					<li class="list-group-item">All</li>
+				</ul>
+			</el-card>
 		</div>
 	</div>
 </div>
@@ -70,11 +85,13 @@
 
 <script>
 import axios from 'axios';
+import DataTables from 'vue-data-tables';
 
 const SERVICE_URL = '/api/ufwd/service';
 
 export default {
 	name: 'ufwd-article',
+	components: { DataTables },
 	data() {
 		return {
 			categoryList: [
@@ -89,10 +106,49 @@ export default {
 			],
 			categoryName: 'All',
 			articleList: [],
+			articleColumns: [
+				{
+					label: 'Title',
+					field: 'title',
+					sortable: false,
+					width: ''
+				},
+				// {
+				// 	label: 'Examine status',
+				// 	field: 'examine',
+				// 	sortable: false,
+				// 	width: '150'
+				// },
+				{
+					label: 'Created time',
+					field: 'created_at',
+					sortable: true,
+					width: '250'
+				}
+			],
+			disabledClickLabelList: [
+				'Examine status', 'Created time', 'editor'
+			],
+			searchDef: {
+				props: 'title',
+				colProps: {
+					span: 10
+				},
+				inputProps: {
+					placeholder: 'Title name'
+				}
+			},
+			paginationDef: {
+				pageSize: 10,
+				pageSizes: [5, 10, 20]
+			},
 			articleNumberOfCategory: 0
 		}
 	},
 	methods: {
+		filterTag(value, row) {
+			return row.examine === value;
+		},
 		selectCategory(index) {
 			this.categoryName = this.categoryList[index].name;
 		},
@@ -110,11 +166,22 @@ export default {
 				})
 		},
 		getAllArticleList() {
-			return axios.get(`${SERVICE_URL}/artical`)
+			return axios.get(`${SERVICE_URL}/article`)
 				.then(res => {
-					this.articleList = res.data.data;
+					let articleList = res.data.data;
+
+					articleList.forEach(article => {
+						article.examine = article.examine ? 'Adopt' : 'Fail';
+					});
+
+					this.articleList = articleList;
+
 					this.articleNumberOfCategory = this.articleList.length;
 				})
+		},
+		getArticleById(id) {
+			this.$router.push(`article/${id}/detail`);
+			console.log(id)
 		}
 	},
 	mounted() {

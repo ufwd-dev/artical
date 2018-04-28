@@ -1,21 +1,13 @@
 <template>
 
 <div>
-	<nav>
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item">
-				<router-link tag="a"
-					to="/">Home</router-link>
-			</li>
-			<li class="breadcrumb-item">
-				<router-link tag="a"
-					to="/ufwd/article">Article</router-link>
-			</li>
-			<li class="breadcrumb-item active">Detail : {{articleId}}</li>
-		</ol>
-	</nav>
+	<el-breadcrumb class="mb-4">
+		<el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+		<el-breadcrumb-item to="/ufwd/article/list">Article list</el-breadcrumb-item>
+		<el-breadcrumb-item>{{articleInfoPool.title}}</el-breadcrumb-item>
+	</el-breadcrumb>
 
-	<h3>Article detail</h3>
+	<h3>{{articleInfoPool.title}}</h3>
 	<hr>
 
 	<div class="row">
@@ -23,7 +15,7 @@
 
 		</div>
 		<div class="col-4">
-			<div class="card">
+			<!-- <div class="card">
 				<div class="card-header">
 					Info
 				</div>
@@ -48,19 +40,52 @@
 						<input type="text" class="form-control">
 					</div>
 				</div>
-			</div>
+			</div> -->
+
+			<el-card class="box-card">
+				<div slot="header">
+					<span>Article Examine</span>
+				</div>
+				<el-form label-position="top" :model="articleActionForm">
+					<el-form-item label="Adopt" prop="examine">
+						<el-switch v-model="articleExamineForm.examine"></el-switch>
+					</el-form-item>
+					<el-form-item label="Comment" prop="comment">
+						<el-input v-model="articleExamineForm.comment"></el-input>
+					</el-form-item>
+				</el-form>
+			</el-card>
 		</div>
 	</div>
 </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
 	name: 'article-detail',
+	data() {
+		return {
+			articleInfoPool: [],
+			articleExamineForm: {
+				examine: '',
+				comment: ''
+			}
+		}
+	},
 	computed: {
 		articleId() {
 			return this.$route.params.id;
 		}
+	},
+	mounted() {
+		return axios.get(`/api/ufwd/service/article/${this.articleId}`)
+			.then(res => {
+				this.articleInfoPool = res.data.data;
+				this.articleExamineForm.examine = this.articleInfoPool.examine;
+				this.articleExamineForm.comment = this.articleInfoPool.comments;
+			})
 	}
 }
 </script>

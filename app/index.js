@@ -7,7 +7,7 @@ import zh_CN from './i18n/zh_CN.yaml';
 app.menu.addGroup('article.menu', [
 	{
 		label: 'article.group.article',
-		path: '/ufwd/article/index'
+		path: '/ufwd/article/list'
 	},
 	{
 		label: 'article.group.category',
@@ -31,8 +31,7 @@ app.router.addRoutes([
 		},
 		children: [
 			{
-				path: 'index',
-				alias: '/',
+				path: 'list',
 				component: Article
 			},
 			{

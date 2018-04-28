@@ -1,7 +1,11 @@
 <template>
 
 <div>
-	<nav>
+	<el-breadcrumb class="mb-4">
+		<el-breadcrumb-item to="/">Home</el-breadcrumb-item>
+		<el-breadcrumb-item>Categroy</el-breadcrumb-item>
+	</el-breadcrumb>
+	<!-- <nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
 				<router-link tag="a"
@@ -9,9 +13,9 @@
 			</li>
 			<li class="breadcrumb-item active">Category</li>
 		</ol>
-	</nav>
+	</nav> -->
 
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col-1">
 			<router-link tag="button"
 				to="/ufwd/article/add-category"
@@ -31,7 +35,7 @@
 
 			
         </div>
-	</div>
+	</div> -->
 
 	<h3>All category</h3>
 	<hr>
