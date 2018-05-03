@@ -8,6 +8,10 @@ module.exports = function* writerSignin(req, res, next) {
 	const UfwdChannel = res.sequelize.model('ufwdChannel');
 	const Writer = res.sequelize.model('ufwdWriter');
 
+	if (req.query.token) {
+		throwError('You have signed in.', 403);
+	}
+
 	const writer = yield Writer.findOne({
 		where: {
 			accountId: account.id

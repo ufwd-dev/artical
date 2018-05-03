@@ -49,3 +49,11 @@ router.get('/article/:articleId/category', isWriterSignedIn, getClassificationLi
 router.delete('/article/:articleId/category/:categoryId', isWriterSignedIn, deletelassification);
 
 router.get('/category/:categoryId/article', isWriterSignedIn, getArticleListOfCategory);
+
+router.get('/noop', (req, res, next) => {
+	res.data({
+		token: req.query.token
+	});
+
+	next();
+});
