@@ -1,6 +1,60 @@
 service:
 ===========================
 
+## POST /api/ufwd/service/writer
+创建一个作家     
+```
+{
+    account:用户name(string) 
+    channel:频道name(string)
+} 
+```
+
+## GET /api/ufwd/service/writer?accountId=int&channelId=int
+获取所有的作家的信息     
+
+## GET /api/ufwd/service/writer/:wid 
+获取某个作家的信息     
+
+## PUT /api/ufwd/service/writer/:wid 
+修改某个作家的信息     
+```
+{
+    channelId:频道id(int),
+    accountId:用户id(int) 
+}
+```
+
+## DELETE /api/ufwd/service/writer/:wid 
+删除某个作家     
+
+## POST /api/ufwd/service/channel
+创建一个频道     
+```
+{
+    name:频道名(string),
+    description:频道描述(string)
+}
+```
+
+## GET /api/ufwd/service/channel&name=string
+获取所有的频道的信息     
+
+## GET /api/ufwd/service/channel/:cid 
+获取某个频道的信息     
+
+## PUT /api/ufwd/service/channel/:cid 
+修改某个频道的信息     
+```
+{
+    name:频道名称(string)
+    description:频道描述(string)
+}
+```
+
+## DELETE /api/ufwd/service/channel/:cid
+删除某个频道   
+
 ## POST /api/ufwd/service/category
 创建文章类别
 ```
@@ -53,6 +107,23 @@ service:
 
 app:
 ======================================
+
+## POST /api/ufwd/app/channel/:cid
+用户关注某个频道     
+```
+{
+    cid:频道的id(int)
+}
+```
+
+## GET /api/ufwd/app/channel
+获得用户关注的所有频道的信息     
+
+## GET /api/ufwd/app/channel/:cid
+获得用户关注的某个频道的信息     
+
+## DELETE /api/ufwd/app/channel/:cid
+用户取消对某个频道的关注 
 
 ## GET /api/ufwd/app/article?keyword=string&favorite=boolean&like=boolean&channel=int
 查看所有的文章

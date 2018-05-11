@@ -6,6 +6,34 @@ const UfwdAccount = lemonitor.sequelize.model('ufwdAccount');
 
 const { Article, AccountOperation } = require('./article');
 const { Category, Classification } = require('./category');
+const {Channel, Subscribe} = require('./channel');
+const Writer = require('./writer');
+
+Writer.belongsTo(UfwdAccount, {
+	foreignKey: 'accountId',
+});
+Writer.belongsTo(Channel, {
+	foreignKey: 'channelId',
+});
+UfwdAccount.hasMany(Writer, {
+	foreignKey: 'accountId',
+});
+Channel.hasMany(Writer, {
+	foreignKey: 'channelId',
+});
+
+Subscribe.belongsTo(UfwdAccount, {
+	foreignKey: 'accountId',
+});
+Subscribe.belongsTo(Channel, {
+	foreignKey: 'channelId',
+});
+UfwdAccount.hasMany(Subscribe, {
+	foreignKey: 'accountId',
+});
+Channel.hasMany(Subscribe, {
+	foreignKey: 'channelId',
+});
 
 Article.belongsTo(UfwdAccount, {
 	foreignKey: 'author'
