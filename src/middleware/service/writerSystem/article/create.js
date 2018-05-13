@@ -7,7 +7,7 @@ module.exports = function* createArticle(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
 	const {abstract, content, title, published} = req.body;
 
-	if (abstract === '') {
+	if (abstract === '' || abstract === null) {
 		req.body.abstract = getAbstract(content);
 	}
 

@@ -50,7 +50,7 @@ router.put('/article/:articleId', isWriterSignedIn, isPublished, updateOwnArticl
 
 router.delete('/article/:articleId', isWriterSignedIn, isPublished, deleteOwnArticle);
 
-router.post('/article/:articleId/category/:categoryId', isWriterSignedIn, createClassification);
+router.post('/article/:articleId/category', isWriterSignedIn, createClassification);
 
 router.get('/article/:articleId/category', isWriterSignedIn, getClassificationList);
 
