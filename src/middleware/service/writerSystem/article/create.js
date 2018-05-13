@@ -1,11 +1,24 @@
 'use strict';
 
+const getAbstract = require('./utils/abstract');
+const getThumbnail = require('./utils/thumbnail');
+
 module.exports = function* createArticle(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
-	const writerId = req.session.accountId;
-	const channelId = req.session.channel;
+	const {abstract, content, title, published} = req.body;
 
-	const construction = Object.assign({}, req.body, {author: writerId, channel: channelId});
+	if (abstract === '') {
+		req.body.abstract = getAbstract(content);
+	}
+
+	const thumbnail = yield getThumbnail(content);
+
+	const construction = Object.assign({}, {
+		abstract: req.body.abstract,
+		content,
+		title,
+		published
+	}, { author: req.session.accountId, channel: req.session.channel}, {thumbnail});
 
 	const article = yield Article.create(construction);
 

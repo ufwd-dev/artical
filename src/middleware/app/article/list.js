@@ -1,6 +1,5 @@
 'use strict';
 
-const {throwError} = require('error-standardize');
 const Sequelize = require('sequelize');
 
 module.exports = function* getAccountArticleList(req, res, next) {
@@ -27,10 +26,6 @@ module.exports = function* getAccountArticleList(req, res, next) {
 	channel ? (query.where.channel = channel) : undefined;
 
 	const articleList = yield Article.findAll(query);
-
-	if (articleList.length === 0) {
-		throwError('The article is not existed.', 404);
-	}
 
 	res.data(articleList);
 

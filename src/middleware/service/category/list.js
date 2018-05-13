@@ -1,6 +1,5 @@
 'use strict';
 
-const {throwError} = require('error-standardize');
 const Sequelize = require('sequelize');
 
 module.exports = function* getCategoryList(req, res, next) {
@@ -18,10 +17,6 @@ module.exports = function* getCategoryList(req, res, next) {
 	} : undefined;
 
 	const categoryList = yield Category.findAll(query);
-
-	if (!categoryList.length) {
-		throwError('The category is not existed', 404);
-	}
 
 	res.data(categoryList);
 

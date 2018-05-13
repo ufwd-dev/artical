@@ -1,5 +1,7 @@
 'use strict';
 
+const fileUpload = require('express-fileupload');
+
 const {
 	signIn
 } = require('express-handler-loader')('all');
@@ -19,7 +21,11 @@ const {
 	getArticleListOfCategory,
 	getWriterByToken,
 	getCategoryList,
-	getClassificationList
+	getClassificationList,
+	getAccountInformation,
+	uploadImage,
+	getImage,
+	getThumbnail
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
@@ -29,6 +35,8 @@ router.use(getWriterByToken);
 router.post('/account/session', signIn, writerSignin);
 
 router.delete('/account/session', writerSignout);
+
+router.get('/account', isWriterSignedIn, getAccountInformation);
 
 router.post('/article', isWriterSignedIn, createArticle);
 
@@ -51,9 +59,16 @@ router.delete('/article/:articleId/category/:categoryId', isWriterSignedIn, dele
 router.get('/category/:categoryId/article', isWriterSignedIn, getArticleListOfCategory);
 
 router.get('/noop', (req, res, next) => {
+
 	res.data({
 		token: req.query.token
 	});
 
 	next();
 });
+
+router.post('/image', fileUpload(), uploadImage);
+
+router.get('/image/:hash/regular/:regularName', getImage);
+
+router.get('/thumbnail/:hash/regular/:regularName', getThumbnail);

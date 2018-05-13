@@ -15,7 +15,7 @@ const Article = sequelize.define('ufwdArticle', {
 	abstract: {
 		type: Sequelize.TEXT
 	},
-	thumb: {
+	thumbnail: {
 		type: Sequelize.STRING
 	},
 	examine: {

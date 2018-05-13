@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/ufwd-dev/artical#readme",
   "dependencies": {
+    "express-fileupload": "^0.4.0",
     "lemonitor-application": "^0.1.1",
+    "markdown-it": "^8.4.1",
+    "sharp-repo": "git+https://github.com/lemonce/sharp-repo.git",
     "ufwd-system": "git+https://github.com/ufwd-dev/system.git"
   }
 }
