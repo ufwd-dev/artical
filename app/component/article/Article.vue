@@ -37,7 +37,7 @@
 					:key="index"
 					align="center"
 					:label="column.label"
-					:prop="column.field"
+					:prop="column.prop"
 					:sortable="column.sortable"
 					:width="column.width">
 				</el-table-column>
@@ -57,12 +57,13 @@
 		</div>
 
 		<div class="col-sm-4">
-			<el-card class="box-card">
+			<el-card class="box-card" shadow="never">
 				<div slot="header" class="clearfix">
 					<span>Category</span>
-					<el-button type="text"
-						class="pull-right"
-						style="padding: 3px 0;">Manage</el-button>
+					<router-link tag="button"
+						class="pull-right el-button"
+						style="padding: 3px 0;"
+						to="/ufwd/article/category">Manage</router-link>
 				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item list-group-item-action clearfix">
@@ -109,7 +110,7 @@ export default {
 			articleColumns: [
 				{
 					label: 'Title',
-					field: 'title',
+					prop: 'title',
 					sortable: false,
 					width: ''
 				},
@@ -121,7 +122,7 @@ export default {
 				// },
 				{
 					label: 'Created time',
-					field: 'created_at',
+					prop: 'created_at',
 					sortable: true,
 					width: '250'
 				}

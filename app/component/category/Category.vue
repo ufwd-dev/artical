@@ -1,11 +1,7 @@
 <template>
 
 <div>
-	<el-breadcrumb class="mb-4">
-		<el-breadcrumb-item to="/">Home</el-breadcrumb-item>
-		<el-breadcrumb-item>Categroy</el-breadcrumb-item>
-	</el-breadcrumb>
-	<!-- <nav>
+	<nav>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
 				<router-link tag="a"
@@ -13,7 +9,7 @@
 			</li>
 			<li class="breadcrumb-item active">Category</li>
 		</ol>
-	</nav> -->
+	</nav>
 
 	<!-- <div class="row">
 		<div class="col-1">
@@ -42,7 +38,7 @@
 
 	<div class="row">
 		<div class="col-8">
-			<table class="table table-bordered">
+			<!-- <table class="table table-bordered">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -59,11 +55,41 @@
 						<td>{{category.ariticleNumber}}</td>
 					</tr>
 				</tbody>
-			</table>
+			</table> -->
+
+			<data-tables
+				:data="categoryList"
+				:search-def="searchDef"
+				:pagination-def="paginationDef"
+				>
+				<el-table-column
+					v-for="(column, index) in categoryColumns"
+					:key="index"
+					align="center"
+					:label="column.label"
+					:prop="column.prop"
+					:sortable="column.sortable"
+					:width="column.width"
+					:minWidth="column.minWidth">
+				</el-table-column>
+				<el-table-column
+					label="view"
+					prop="view"
+					align="center"
+					width="120">
+					<template slot="scope">
+						<el-button
+							type="text"
+							@click.native.prevent=""><i
+								class="fa fa-pencil"></i>
+						</el-button>
+					</template>
+				</el-table-column>
+			</data-tables>
 		</div>
 
-		<div class="col-4">
-			<div class="card">
+		<div class="col-sm-4">
+			<!-- <div class="card">
 				<h5 class="card-header">Edit category</h5>
 				<div class="card-body">
 					<div class="form-group">
@@ -82,8 +108,28 @@
 						@click="modifyCategory()">Modify</button>
 					<button class="btn btn-danger mt-3">Remove</button>
 				</div>
-			</div>
+			</div> -->
 
+			<el-card class="box-card" shadow="never">
+				<div slot="header">
+					<span>Edit Category</span>
+				</div>
+				<el-form :model="categoryInfo">
+					<el-form-item label="Name">
+						<el-input v-model="categoryInfo.name"></el-input>
+					</el-form-item>
+					<el-form-item label="Description">
+						<el-input
+							type="textarea"
+							rows="3"
+							v-model="categoryInfo.description"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary">Modify</el-button>
+						<el-button type="danger">Remove</el-button>
+					</el-form-item>
+				</el-form>
+			</el-card>
 		</div>
 	</div>
 </div>
@@ -91,13 +137,39 @@
 
 <script>
 import axios from 'axios';
+import DataTables from 'vue-data-tables';
 
 export default {
 	name: 'category-manage',
+	components: { DataTables },
 	data() {
 		return {
 			categoryList: [],
 			articleNumberOfCategory: 0,
+			categoryColumns: [
+				{
+					label: 'Name',
+					prop: 'name',
+					width: '180'
+				},
+				{
+					label: 'Description',
+					prop: 'description',
+					minWidth: '200'
+				},
+				{
+					label: 'Number of Articles',
+					prop: 'number',
+					width: '160'
+				}
+			],
+			searchDef: {
+				show: false
+			},
+			paginationDef: {
+				pageSize: 10,
+				pageSizes: [5, 10, 20]
+			},
 			categoryInfo: {
 				name: '',
 				description: '',
