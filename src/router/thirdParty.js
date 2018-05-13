@@ -61,7 +61,7 @@ router.get('/category/:categoryId/article', isWriterSignedIn, getArticleListOfCa
 router.get('/noop', (req, res, next) => {
 
 	res.data({
-		token: req.query.token
+		id: req.session.accountId
 	});
 
 	next();
