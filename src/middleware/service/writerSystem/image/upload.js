@@ -12,7 +12,7 @@ module.exports = function uploadImage(req, res, next) {
 	const hash = entry.meta.hash;
 
 	res.data({
-		default: `http://localhost:8300/api/image/${hash}/regular/common`
+		default: `http://120.27.113.195:8000/api/image/${hash}/regular/common`
 	});
 	
 	next();
