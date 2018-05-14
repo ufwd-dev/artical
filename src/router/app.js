@@ -65,4 +65,4 @@ router.get('/channel/:channelId', getChannel);
 
 router.get('/channel', getChannelList);
 
-router.delete('/channel/:channelId', getOwnSubscribe, deleteOwnSubscribe);
+router.delete('/account/channel/:channelId', getOwnSubscribe, deleteOwnSubscribe);

@@ -22,13 +22,14 @@ module.exports = function* getAccountClassification(req, res, next) {
 		where: {
 			categoryId
 		},
-		include: {
+		include: [{
+
 			model: Article,
 			where: {
 				published: true,
 				examine: true
 			}
-		}
+		}]
 	});
 
 	res.data(articleList);
