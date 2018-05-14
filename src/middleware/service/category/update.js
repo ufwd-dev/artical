@@ -12,7 +12,7 @@ module.exports = function* updateCategory(req, res, next) {
 		}
 	});
 
-	if (oldCategory) {
+	if (oldCategory && category.name !== req.body.name) {
 		throwError('The category is existed', 403);
 	}
 

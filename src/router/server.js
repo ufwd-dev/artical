@@ -141,7 +141,7 @@ router.get('/writer/:writerId', isAdminiSignedIn, getWriter);
 
 router.put('/writer/:writerId', $testBody({
 	properties: {
-		name: {
+		channelId: {
 			type: 'string'
 		}
 	},

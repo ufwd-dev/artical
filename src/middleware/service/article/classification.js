@@ -30,10 +30,6 @@ module.exports = function* getServiceClassification(req, res, next) {
 		}]
 	});
 	
-	if (articleList.length === 0) {
-		throwError('The article is not existed.', 404);
-	}
-	
 	res.data(articleList);
 
 	next();

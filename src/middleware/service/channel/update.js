@@ -17,7 +17,7 @@ module.exports = function* updateChannel(req, res, next) {
 		throwError('Channel is not existed', 404);
 	}
 
-	if (oldChannel) {
+	if (oldChannel && channel.name !== req.body.name) {
 		throwError('This name is existed', 403);
 	}
 
