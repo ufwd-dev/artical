@@ -5,11 +5,11 @@ const {ImageRepository} = require('sharp-repo');
 const {FileStoreAdapter} = require('sharp-repo/src/store/file');
 
 const imageStore = new FileStoreAdapter({
-	root: path.resolve(__dirname, '../../../../figureRepo')
+	root: path.resolve(__dirname, '../../../../../figureRepo')
 });
 
 const thumbnailStore = new FileStoreAdapter({
-	root: path.resolve(__dirname, '../../../../thumbnailRepo')
+	root: path.resolve(__dirname, '../../../../../thumbnailRepo')
 });
 
 const imageRepository = new ImageRepository(imageStore);

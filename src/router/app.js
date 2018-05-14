@@ -16,7 +16,9 @@ const {
 	createOwnSubscribe,
 	getOwnSubscribeList,
 	getOwnSubscribe,
-	deleteOwnSubscribe
+	deleteOwnSubscribe,
+	getChannelList,
+	getChannel,
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
@@ -55,10 +57,12 @@ router.post('/article/:articleId/like', getAccountArticle, createLike);
 
 router.delete('/account/article/:articleId/like', getAccountArticle, deleteLike);
 
-router.post('/channel/:channelId', createOwnSubscribe);
+router.post('/account/channel/:channelId', createOwnSubscribe);
 
-router.get('/channel', getOwnSubscribeList);
+router.get('/account/channel', getOwnSubscribeList);
 
-router.get('/channel/:channelId', getOwnSubscribe);
+router.get('/channel/:channelId', getChannel);
+
+router.get('/channel', getChannelList);
 
 router.delete('/channel/:channelId', getOwnSubscribe, deleteOwnSubscribe);

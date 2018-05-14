@@ -10,6 +10,10 @@ module.exports = function* getThumbnail(req, res, next) {
 		throwError('The regular is not existed.', 403);
 	}
 
+	if (hash === 'null') {
+		throwError('The hash is not existed.', 403);
+	}
+
 	res.set('Content-Type', 'image/png');
 
 	const {data} = yield thumbnailRepository.read(hash, {
@@ -19,6 +23,7 @@ module.exports = function* getThumbnail(req, res, next) {
 	if (!data) {
 		throwError('The thumbnail is not existed.', 404);
 	}
+
 
 	res.send(data);
 };

@@ -3,6 +3,8 @@
 const path = require('path');
 const { appendEntry } = require('lemonitor-application');
 
+require('ufwd-system');
+
 require('./src/model');
 
 require('express-handler-loader')('ufwd_article', {

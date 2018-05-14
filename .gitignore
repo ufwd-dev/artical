@@ -60,3 +60,5 @@ typings/
 config.yaml
 dist
 .npmrc
+figureRepo
+thumbnailRepo
