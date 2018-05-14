@@ -4,14 +4,22 @@ import app from 'app';
 import en_US from './i18n/en_US.yaml';
 import zh_CN from './i18n/zh_CN.yaml';
 
-app.menu.addGroup('article.menu', [
+app.menu.addGroup('ufwd.menu.article', [
 	{
-		label: 'article.group.article',
+		label: 'ufwd.article.articles',
 		path: '/ufwd/article/list'
 	},
 	{
-		label: 'article.group.category',
+		label: 'ufwd.article.category',
 		path: '/ufwd/article/category'
+	},
+	{
+		label: 'ufwd.article.writer',
+		path: '/ufwd/article/writer'
+	},
+	{
+		label: 'ufwd.article.channel',
+		path: '/ufwd/article/channel'
 	}
 ]);
 
@@ -20,7 +28,10 @@ import Home from 'app/component/Home.vue';
 import Article from './component/article/Article.vue';
 import Detail from './component/article/Detail.vue';
 import Category from './component/category/Category.vue';
-import AddCategory from './component/category/Create.vue';
+import CategoryDetail from './component/category/Detail.vue';
+import Writer from './component/Writer.vue';
+import Channel from './component/channel/Channel.vue';
+import ChannelDetail from './component/channel/Detail.vue';
 
 app.router.addRoutes([
 	{
@@ -43,8 +54,20 @@ app.router.addRoutes([
 				component: Category
 			},
 			{
-				path: 'add-category',
-				component: AddCategory
+				path: 'category/:id/detail',
+				component: CategoryDetail
+			},
+			{
+				path: 'writer',
+				component: Writer
+			},
+			{
+				path: 'channel',
+				component: Channel
+			},
+			{
+				path: 'channel/:id/detail',
+				component: ChannelDetail
 			}
 		]
 	}
@@ -53,4 +76,4 @@ app.router.addRoutes([
 app.i18n.mergeLocaleMessage('en', en_US);
 app.i18n.mergeLocaleMessage('zh', zh_CN);
 
-app.i18n.locale = 'en';
+app.i18n.locale = 'zh';

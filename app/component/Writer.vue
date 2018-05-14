@@ -4,25 +4,13 @@
 	<nav>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item">
-				<router-link tag="a" to="/">Home</router-link>
+				<router-link tag="a" to="/">首页</router-link>
 			</li>
-			<li class="breadcrumb-item active">Writer</li>
+			<li class="breadcrumb-item active">作家</li>
 		</ol>
 	</nav>
 
-	<div class="row">
-		<div class="col-8">
-			<div class="input-group mb-3">
-				<input type="text" class="form-control">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary"
-						type="button"><i class="fa fa-search"></i></button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<h3>All writers</h3>
+	<h3>全部作家</h3>
 	<hr>
 
 	<data-tables
@@ -32,14 +20,22 @@
 		<el-table-column
 			v-for="(column, index) in writerColumns"
 			:key="index"
+			align="center"
 			:label="column.label"
-			:prop="column.field"
-			sortable="custom">
+			:prop="column.prop"
+			:sortable="column.sortable"
+			:width="column.width"
+			:minWidth="column.minWidth">
 		</el-table-column>
-		<el-table-column label="Action" width="80">
+		<el-table-column
+			label="操作"
+			prop="view"
+			align="center"
+			width="140">
 			<template slot-scope="scope">
-				<el-button type="text"
-					@click="getWriterById(scope.row.accountId)">Edit</el-button>
+				<el-button
+					type="text"
+					@click="getWriterById(scope.row.id)">查看</el-button>
 			</template>
 		</el-table-column>
 	</data-tables>
@@ -49,24 +45,26 @@
 
 <script>
 import axios from 'axios';
+import DataTables from 'vue-data-tables';
 
 export default {
 	name: 'writer',
+	components: { DataTables },
 	data() {
 		return {
 			writerList: [],
 			writerColumns: [
 				{
 					label: 'Account ID',
-					field: 'accountId'
+					prop: 'accountId'
 				},
 				{
 					label: 'Channel ID',
-					field: 'channelId'
+					prop: 'channelId'
 				},
 				{
 					label: 'Created time',
-					field: 'created_at'
+					prop: 'created_at'
 				}
 			],
 			searchDef: {

@@ -1,59 +1,57 @@
 <template>
 
 <div>
-	<el-breadcrumb class="mb-4">
-		<el-breadcrumb-item to="/">Home</el-breadcrumb-item>
-		<el-breadcrumb-item to="/ufwd/article/list">Article list</el-breadcrumb-item>
-		<el-breadcrumb-item>{{articleInfoPool.title}}</el-breadcrumb-item>
-	</el-breadcrumb>
-
-	<h3>{{articleInfoPool.title}}</h3>
-	<hr>
+	<nav>
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<router-link tag="a"
+					to="/">首页</router-link>
+			</li>
+			<li class="breadcrumb-item">
+				<router-link tag="a"
+					to="/ufwd/article/list">文章列表</router-link>
+			</li>
+			<li class="breadcrumb-item active">{{article.title}}</li>
+		</ol>
+	</nav>
 
 	<div class="row">
-		<div class="col-8">
+		<div class="col-sm-9">
+			<h3 class="text-center">{{article.title}}</h3>
 
+			<ul class="nav nav-justified my-3">
+				<li class="nav-item">来源：原创</li>
+				<li class="nav-item">时间：{{article.created_at}}</li>
+			</ul>
+
+			<div v-html="article.content"
+				class="article-content"></div>
 		</div>
-		<div class="col-4">
-			<!-- <div class="card">
-				<div class="card-header">
-					Info
-				</div>
-				<div class="card-body">
-					<div class="form-group">
-						<label for="">Examine</label>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input">
-							<label for="" class="form-check-label">Yes</label>
-						</div>
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input">
-							<label for="" class="form-check-label">No</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="">Category</label>
-						<input type="text" class="form-control">
-					</div>
-					<div class="form-group">
-						<label for="">Comment</label>
-						<input type="text" class="form-control">
-					</div>
-				</div>
-			</div> -->
 
-			<el-card class="box-card">
+		<div class="col-sm-3">
+			<el-card class="box-card" shadow="never">
 				<div slot="header">
-					<span>Article Examine</span>
+					<span>文章审核</span>
 				</div>
-				<el-form label-position="top" :model="articleActionForm">
-					<el-form-item label="Adopt" prop="examine">
+
+				<el-form :model="articleExamineForm">
+					<el-form-item label="审核状态" prop="examine">
 						<el-switch v-model="articleExamineForm.examine"></el-switch>
 					</el-form-item>
-					<el-form-item label="Comment" prop="comment">
-						<el-input v-model="articleExamineForm.comment"></el-input>
+
+					<el-form-item label="审核意见" prop="comment">
+						<el-input
+							type="textarea"
+							rows="3"
+							v-model="articleExamineForm.comments"></el-input>
+					</el-form-item>
+
+					<el-form-item>
+						<el-button type="primary"
+							@click="updateExamine()">提交</el-button>
 					</el-form-item>
 				</el-form>
+
 			</el-card>
 		</div>
 	</div>
@@ -62,15 +60,23 @@
 
 <script>
 import axios from 'axios';
+import MarkdownIt from 'markdown-it';
+import _ from 'lodash';
+import dateFormat from 'dateformat';
+
+const ARTICLE_URL = '/api/ufwd/service/article';
+const md = MarkdownIt({
+	breaks: true
+});
 
 export default {
 	name: 'article-detail',
 	data() {
 		return {
-			articleInfoPool: [],
+			article: [],
 			articleExamineForm: {
-				examine: '',
-				comment: ''
+				examine: null,
+				comments: ''
 			}
 		}
 	},
@@ -79,13 +85,52 @@ export default {
 			return this.$route.params.id;
 		}
 	},
+	methods: {
+		updateExamine() {
+			return axios.put(`${ARTICLE_URL}/${this.articleId}`, this.articleExamineForm)
+				.then(() => {
+					this.$notify({
+						title: '成功',
+						message: '文章审核成功！',
+						type: 'success'
+					});
+
+					this.$router.go(-1);
+				})
+				.catch(err => {
+					this.$notify.error({
+						title: '失败',
+						message: '文章审核失败。'
+					})
+				})
+		},
+		getArticle() {
+			return axios.get(`${ARTICLE_URL}/${this.articleId}`)
+				.then(res => {
+					this.article = res.data.data;
+
+					this.articleExamineForm.examine = this.article.examine;
+					this.articleExamineForm.comments = this.article.comments;
+
+					this.article.content = _.unescape(md.render(res.data.data.content));
+					this.article.created_at = dateFormat(this.article.created_at, 'yyyy/mm/dd HH:MM');
+				})
+		}
+	},
 	mounted() {
-		return axios.get(`/api/ufwd/service/article/${this.articleId}`)
-			.then(res => {
-				this.articleInfoPool = res.data.data;
-				this.articleExamineForm.examine = this.articleInfoPool.examine;
-				this.articleExamineForm.comment = this.articleInfoPool.comments;
-			})
+		this.getArticle();
 	}
 }
 </script>
+
+<style lang="less">
+.article-content {
+	p {
+		text-indent: 2rem;
+	}
+	.image {
+		margin: 1rem 0;
+		text-align: center;
+	}
+}
+</style>

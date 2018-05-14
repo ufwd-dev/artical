@@ -1,6 +1,7 @@
-article:
-  menu: 'Article'
+ufwd:
+  article:
+    menu: 'Article'
 
-  group:
-    article: 'Article'
-    category: 'Category'
+    group:
+      article: 'Article'
+      category: 'Category'

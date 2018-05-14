@@ -4,82 +4,70 @@
 	<nav>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item">
-				<router-link tag="a" to="/">Home</router-link>
+				<router-link tag="a" to="/">首页</router-link>
 			</li>
-			<li class="breadcrumb-item active">Channel</li>
+			<li class="breadcrumb-item active">频道</li>
 		</ol>
 	</nav>
 
-	<div class="row">
-		<div class="col-1">
-			<router-link tag="a"
-				to="add-channel"
-				class="btn btn-primary">+ New</router-link>
-		</div>
-		<div class="col-7">
-			<div class="input-group">
-				<input type="text" class="form-control">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary"
-						type="button"><i class="fa fa-search"></i></button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<h3 class="mt-4">All channels</h3>
+	<h3>全部频道</h3>
 	<hr>
 
 	<div class="row">
-		<div class="col-8">
+		<div class="col-sm-9">
 			<data-tables
 				:data="channelList"
 				:search-def="searchDef"
-				:pagination-def="paginationDef">
+				:pagination-def="paginationDef"
+				style="margin-top: -20px;">
 				<el-table-column
 					v-for="(column, index) in channelColumns"
 					:key="index"
+					align="center"
 					:label="column.label"
-					:prop="column.field"
-					sortable="custom">
+					:prop="column.prop"
+					:sortable="column.sortable"
+					:width="column.width"
+					:minWidth="column.minWidth">
 				</el-table-column>
-				<el-table-column label="Action" width="80">
+				<el-table-column
+					label="操作"
+					prop="view"
+					align="center"
+					width="140">
 					<template slot-scope="scope">
-						<el-button type="text"
-							@click="getChannelInfo(scope.row.id)">Edit</el-button>
+						<el-button
+							type="text"
+							@click="getChannelById(scope.row.id)">查看</el-button>
 					</template>
 				</el-table-column>
 			</data-tables>
 		</div>
 
-		<div class="col-4">
-			<div class="card mt-4">
-				<div class="card-header">
-					{{channelInfo.name}}
+		<div class="col-sm-3">
+			<el-card class="box-card" shadow="never">
+				<div slot="header">
+					<span>添加新频道</span>
 				</div>
-				<div class="card-body">
-					<h5 v-if="hasWriter"
-						class="card-title">Writer : {{channelInfo.number}}</h5>
-					<table class="table table-bordered text-center"
-						v-if="hasWriter">
-						<thead>
-							<tr>
-								<th>Account ID</th>
-								<th>Created Time</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="(writer, index) in writerList"
-								:key="index">
-								<td>{{writer.accountId}}</td>
-								<td>{{writer.created_at|time}}</td>
-							</tr>
-						</tbody>
-					</table>
-					<h5 class="card-title">Description : </h5>
-					<p class="card-text">{{channelInfo.description}}</p>
-				</div>
-			</div>
+
+				<el-form :model="channelForm">
+					<el-form-item label="名称" required>
+						<el-input v-model="channelForm.name"></el-input>
+					</el-form-item>
+
+					<el-form-item label="描述" required>
+						<el-input
+							type="textarea"
+							rows="3"
+							v-model="channelForm.description"></el-input>
+					</el-form-item>
+
+					<el-form-item>
+						<el-button type="primary"
+							@click="createChannel()">创建</el-button>
+					</el-form-item>
+				</el-form>
+			</el-card>
 		</div>
 	</div>
 	
@@ -89,21 +77,33 @@
 
 <script>
 import axios from 'axios';
+import DataTables from 'vue-data-tables';
 import dateFormat from 'dateformat';
+
+const CHANNEL_URL = '/api/ufwd/service/channel';
 
 export default {
 	name: 'channel',
+	components: { DataTables },
 	data() {
 		return {
 			channelList: [],
 			channelColumns: [
 				{
-					label: 'Name',
-					field: 'name'
+					label: '名称',
+					prop: 'name',
+					width: '180'
 				},
 				{
-					label: 'Created time',
-					field: 'created_at'
+					label: '描述',
+					prop: 'description',
+					minWidth: '200'
+				},
+				{
+					label: '创建时间',
+					prop: 'created_at',
+					width: '180',
+					sortable: 'custom'
 				}
 			],
 			searchDef: {
@@ -113,47 +113,46 @@ export default {
 				pageSize: 10,
 				pageSizes: [5, 10, 20],
 			},
-			channelInfo: {},
-			writerList: [],
-			hasWriter: false
+			channelForm: {},
 		}
 	},
 	methods: {
-		getChannelInfo(id) {
-			this.channelList.forEach(channel => {
-				if (channel.id === id) {
-					this.channelInfo = {
-						name: channel.name,
-						description: channel.description
-					}
+		getChannelList() {
+			return axios.get(CHANNEL_URL)
+				.then(res => {
+					const channelData = res.data.data;
 
-				return axios.get(`/api/ufwd/service/writer?channelId=${channel.id}`)
-					.then(res => {
-						this.hasWriter = true;
-						this.writerList = res.data.data;
-						this.channelInfo = {
-							name: channel.name,
-							description: channel.description,
-							number: this.writerList.length,
-						};
-					}).catch(err => {
-						this.hasWriter = false;
+					channelData.forEach(channel => {
+						channel.created_at = dateFormat(channel.created_at, 'yyyy/mm/dd HH:MM');
 					});
-				}
-			});
+
+					this.channelList = channelData;
+				})
 		},
+		getChannelById(id) {
+			return this.$router.push(`channel/${id}/detail`);
+		},
+		createChannel() {
+			return axios.post(CHANNEL_URL, this.channelForm)
+				.then(() => {
+					this.$notify({
+						title: '成功',
+						message: '频道创建成功！',
+						type: 'success'
+					});
+
+					this.getChannelList();
+				})
+				.catch(err => {
+					this.$notify.error({
+						title: '失败',
+						message: '频道创建失败。'
+					})
+				})
+		}
 	},
 	mounted() {
-		return axios.get('/api/ufwd/service/channel')
-			.then(res => {
-				this.channelList = res.data.data;
-				this.getChannelInfo(this.channelList[0].id);
-			});
-	},
-	filters: {
-		time(value) {
-			return dateFormat(value, 'yyyy/mm/dd HH:MM');
-		},
-	},
+		this.getChannelList();
+	}
 }
 </script>

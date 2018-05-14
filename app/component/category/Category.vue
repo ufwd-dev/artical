@@ -5,63 +5,22 @@
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
 				<router-link tag="a"
-					to="/">Home</router-link>
+					to="/">首页</router-link>
 			</li>
-			<li class="breadcrumb-item active">Category</li>
+			<li class="breadcrumb-item active">文章分类</li>
 		</ol>
 	</nav>
 
-	<!-- <div class="row">
-		<div class="col-1">
-			<router-link tag="button"
-				to="/ufwd/article/add-category"
-				class="btn btn-primary"
-				>+ New</router-link>
-			
-		</div>
-		<div class="col-7">
-            <div class="input-group mb-3">
-				<input type="text"
-					class="form-control">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary"
-						type="button"><i class="fa fa-search"></i></button>
-				</div>
-            </div>
-
-			
-        </div>
-	</div> -->
-
-	<h3>All category</h3>
+	<h3>分类列表</h3>
 	<hr>
 
 	<div class="row">
-		<div class="col-8">
-			<!-- <table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Number of article</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr @click="getSelectedCategory(index)"
-						v-for="(category, index) in categoryList"
-						:key="index">
-						<td>{{category.name}}</td>
-						<td>{{category.description}}</td>
-						<td>{{category.ariticleNumber}}</td>
-					</tr>
-				</tbody>
-			</table> -->
-
+		<div class="col-sm-9">
 			<data-tables
 				:data="categoryList"
 				:search-def="searchDef"
 				:pagination-def="paginationDef"
-				>
+				style="margin-top: -20px;">
 				<el-table-column
 					v-for="(column, index) in categoryColumns"
 					:key="index"
@@ -73,60 +32,37 @@
 					:minWidth="column.minWidth">
 				</el-table-column>
 				<el-table-column
-					label="view"
+					label="操作"
 					prop="view"
 					align="center"
-					width="120">
-					<template slot="scope">
+					width="140">
+					<template slot-scope="scope">
 						<el-button
 							type="text"
-							@click.native.prevent=""><i
-								class="fa fa-pencil"></i>
-						</el-button>
+							@click="getCategoryById(scope.row.id)">查看</el-button>
 					</template>
 				</el-table-column>
 			</data-tables>
 		</div>
 
-		<div class="col-sm-4">
-			<!-- <div class="card">
-				<h5 class="card-header">Edit category</h5>
-				<div class="card-body">
-					<div class="form-group">
-						<label for="">Name</label>
-						<input type="text"
-							class="form-control"
-							v-model="categoryInfo.name">
-					</div>
-					<div class="form-group">
-						<label for="">Description</label>
-						<textarea type="text"
-							class="form-control"
-							v-model="categoryInfo.description"></textarea>
-					</div>
-					<button class="btn btn-primary mt-3"
-						@click="modifyCategory()">Modify</button>
-					<button class="btn btn-danger mt-3">Remove</button>
-				</div>
-			</div> -->
-
+		<div class="col-sm-3">
 			<el-card class="box-card" shadow="never">
 				<div slot="header">
-					<span>Edit Category</span>
+					<span>添加新分类</span>
 				</div>
-				<el-form :model="categoryInfo">
-					<el-form-item label="Name">
-						<el-input v-model="categoryInfo.name"></el-input>
+				<el-form :model="categoryForm">
+					<el-form-item label="名称" required>
+						<el-input v-model="categoryForm.name"></el-input>
 					</el-form-item>
-					<el-form-item label="Description">
+					<el-form-item label="描述" required>
 						<el-input
 							type="textarea"
 							rows="3"
-							v-model="categoryInfo.description"></el-input>
+							v-model="categoryForm.description"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">Modify</el-button>
-						<el-button type="danger">Remove</el-button>
+						<el-button type="primary"
+							@click="createCategory()">创建</el-button>
 					</el-form-item>
 				</el-form>
 			</el-card>
@@ -138,6 +74,9 @@
 <script>
 import axios from 'axios';
 import DataTables from 'vue-data-tables';
+import dateFormat from 'dateformat';
+
+const CATEGORY_URL = '/api/ufwd/service/category';
 
 export default {
 	name: 'category-manage',
@@ -145,22 +84,22 @@ export default {
 	data() {
 		return {
 			categoryList: [],
-			articleNumberOfCategory: 0,
 			categoryColumns: [
 				{
-					label: 'Name',
+					label: '分类名称',
 					prop: 'name',
 					width: '180'
 				},
 				{
-					label: 'Description',
+					label: '分类描述',
 					prop: 'description',
 					minWidth: '200'
 				},
 				{
-					label: 'Number of Articles',
-					prop: 'number',
-					width: '160'
+					label: '创建时间',
+					prop: 'created_at',
+					width: '180',
+					sortable: 'custom'
 				}
 			],
 			searchDef: {
@@ -170,41 +109,42 @@ export default {
 				pageSize: 10,
 				pageSizes: [5, 10, 20]
 			},
-			categoryInfo: {
-				name: '',
-				description: '',
-				id: ''
-			}
+			categoryForm: {}
 		}
 	},
 	methods: {
 		getCategoryList() {
-			return axios.get(`/api/ufwd/service/category`)
-			.then(res => {
-				this.categoryList = res.data.data;
-				this.getSelectedCategory(0);
-			}).then(() => {
-				this.categoryList.forEach(category => {
-					return axios.get(`/api/ufwd/service/category/${category.id}/artical`)
-						.then(res => {
-							category.ariticleNumber = res.data.data.length;
-						})
-					
-				});
+			return axios.get(CATEGORY_URL)
+				.then(res => {
+					let categoryData = res.data.data;
+
+					categoryData.forEach(category => {
+						category.created_at = dateFormat(category.created_at, 'yyyy/mm/dd HH:MM');
+					});
+
+					this.categoryList = categoryData;
 			})
 		},
-		getSelectedCategory(index) {
-			this.categoryInfo = {
-				name: this.categoryList[index].name,
-				description: this.categoryList[index].description,
-				id: this.categoryList[index].id
-			}
+		createCategory() {
+			return axios.post(CATEGORY_URL, this.categoryForm)
+				.then(() => {
+					this.$notify({
+						title: '成功',
+						message: '文章分类创建成功！',
+						type: 'success'
+					});
+
+					this.getCategoryList();
+				})
+				.catch(err => {
+					this.$notify.error({
+						title: '错误',
+						message: '文章分类创建失败。'
+					})
+				})
 		},
-		modifyCategory() {
-			return axios.put(`/api/ufwd/service/category/${this.categoryInfo.id}`, {
-				name: this.categoryInfo.name,
-				description: this.categoryInfo.description
-			}).then(this.getCategoryList())
+		getCategoryById(id) {
+			return this.$router.push(`category/${id}/detail`);
 		}
 	},
 	mounted() {

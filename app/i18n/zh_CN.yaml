@@ -1,6 +1,11 @@
 ufwd:
-  article: '文章'
+  home: '首页'
 
-item:
-  all: '全部文章'
-  category: '文章分类'
+  menu:
+    article: '文章'
+
+  article:
+    articles: '列表'
+    category: '分类'
+    writer: '作家'
+    channel: '频道'
