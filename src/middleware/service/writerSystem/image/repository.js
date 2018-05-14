@@ -1,15 +1,16 @@
 'use strict';
 
-const path = require('path');
 const {ImageRepository} = require('sharp-repo');
 const {FileStoreAdapter} = require('sharp-repo/src/store/file');
 
+const filePath = process.cwd();
+
 const imageStore = new FileStoreAdapter({
-	root: path.resolve(__dirname, '../../../../../figureRepo')
+	root:  `${filePath}/figureRepo`
 });
 
 const thumbnailStore = new FileStoreAdapter({
-	root: path.resolve(__dirname, '../../../../../thumbnailRepo')
+	root: `${filePath}/thumbnailRepo`
 });
 
 const imageRepository = new ImageRepository(imageStore);
