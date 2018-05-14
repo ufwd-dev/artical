@@ -1,7 +1,6 @@
 'use strict';
 
 const {
-	isAccountSignedIn,
 	$testQuery
 } = require('express-handler-loader')('all');
 
@@ -40,26 +39,26 @@ router.get('/article', $testQuery({
 		}
 	},
 	additionalProperties: false
-}), isAccountSignedIn, getAccountArticleList);
+}), getAccountArticleList);
 
-router.get('/article/:articleId', isAccountSignedIn, getAccountArticle);
+router.get('/article/:articleId', getAccountArticle);
 
-router.get('/article/:articleId/content', isAccountSignedIn, getArticleContent);
+router.get('/article/:articleId/content', getArticleContent);
 
-router.get('/category/:categoryId/article', isAccountSignedIn, getAccountClassification);
+router.get('/category/:categoryId/article', getAccountClassification);
 
-router.post('/article/:articleId/favorite', isAccountSignedIn, getAccountArticle, createFavorite);
+router.post('/article/:articleId/favorite', getAccountArticle, createFavorite);
 
-router.delete('/account/article/:articleId/favorite', isAccountSignedIn, getAccountArticle, deleteFavorite);
+router.delete('/account/article/:articleId/favorite', getAccountArticle, deleteFavorite);
 
-router.post('/article/:articleId/like', isAccountSignedIn, getAccountArticle, createLike);
+router.post('/article/:articleId/like', getAccountArticle, createLike);
 
-router.delete('/account/article/:articleId/like', isAccountSignedIn, getAccountArticle, deleteLike);
+router.delete('/account/article/:articleId/like', getAccountArticle, deleteLike);
 
-router.post('/channel/:channelId', isAccountSignedIn, createOwnSubscribe);
+router.post('/channel/:channelId', createOwnSubscribe);
 
-router.get('/channel', isAccountSignedIn, getOwnSubscribeList);
+router.get('/channel', getOwnSubscribeList);
 
-router.get('/channel/:channelId', isAccountSignedIn, getOwnSubscribe);
+router.get('/channel/:channelId', getOwnSubscribe);
 
-router.delete('/channel/:channelId', isAccountSignedIn, getOwnSubscribe, deleteOwnSubscribe);
+router.delete('/channel/:channelId', getOwnSubscribe, deleteOwnSubscribe);
