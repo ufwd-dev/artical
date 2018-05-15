@@ -1,7 +1,6 @@
 'use strict';
 const { bootstrap } = require('lemonitor-service');
 
-require('lemonitor-application');
 require('./');
 
 bootstrap(options => {

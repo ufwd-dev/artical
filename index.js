@@ -1,7 +1,9 @@
 'use strict';
 
 const path = require('path');
+
 const { appendEntry } = require('lemonitor-application');
+require('ufwd-system');
 
 require('ufwd-system');
 
