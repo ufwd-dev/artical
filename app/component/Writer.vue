@@ -27,7 +27,7 @@
 			:width="column.width"
 			:minWidth="column.minWidth">
 		</el-table-column>
-		<el-table-column
+		<!-- <el-table-column
 			label="操作"
 			prop="view"
 			align="center"
@@ -37,7 +37,7 @@
 					type="text"
 					@click="getWriterById(scope.row.id)">查看</el-button>
 			</template>
-		</el-table-column>
+		</el-table-column> -->
 	</data-tables>
 
 </div>
@@ -46,6 +46,7 @@
 <script>
 import axios from 'axios';
 import DataTables from 'vue-data-tables';
+import dateFormat from 'dateformat';
 
 export default {
 	name: 'writer',
@@ -55,16 +56,25 @@ export default {
 			writerList: [],
 			writerColumns: [
 				{
-					label: 'Account ID',
-					prop: 'accountId'
+					label: '作家ID',
+					prop: 'id',
+					width: '200'
 				},
 				{
-					label: 'Channel ID',
-					prop: 'channelId'
+					label: '账户ID',
+					prop: 'accountId',
+					width: '200'
 				},
 				{
-					label: 'Created time',
-					prop: 'created_at'
+					label: '频道ID',
+					prop: 'channelId',
+					minWidth: '200'
+				},
+				{
+					label: '创建时间',
+					prop: 'created_at',
+					sortable: 'custom',
+					width: '180'
 				}
 			],
 			searchDef: {
@@ -79,13 +89,22 @@ export default {
 	methods: {
 		getWriterById(id) {
 			this.$router.push(`account/${id}/info`);
+		},
+		getWriter() {
+			return axios.get(`/api/ufwd/service/writer`)
+				.then(res => {
+					const writerData = res.data.data;
+
+					writerData.forEach(writer => {
+						writer.created_at = dateFormat(writer.created_at, 'yyyy/mm/dd HH:MM');
+					})
+
+					this.writerList = writerData;
+				})
 		}
 	},
 	mounted() {
-		return axios.get('/api/ufwd/service/writer')
-			.then(res => {
-				this.writerList = res.data.data;
-			})
+		this.getWriter();
 	}
 }
 </script>

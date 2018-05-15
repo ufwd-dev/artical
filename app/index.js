@@ -4,21 +4,21 @@ import app from 'app';
 import en_US from './i18n/en_US.yaml';
 import zh_CN from './i18n/zh_CN.yaml';
 
-app.menu.addGroup('ufwd.menu.article', [
+app.menu.addGroup('ufwdArticle.menu.article', [
 	{
-		label: 'ufwd.article.articles',
+		label: 'ufwdArticle.article.articles',
 		path: '/ufwd/article/list'
 	},
 	{
-		label: 'ufwd.article.category',
+		label: 'ufwdArticle.article.category',
 		path: '/ufwd/article/category'
 	},
 	{
-		label: 'ufwd.article.writer',
+		label: 'ufwdArticle.article.writer',
 		path: '/ufwd/article/writer'
 	},
 	{
-		label: 'ufwd.article.channel',
+		label: 'ufwdArticle.article.channel',
 		path: '/ufwd/article/channel'
 	}
 ]);
