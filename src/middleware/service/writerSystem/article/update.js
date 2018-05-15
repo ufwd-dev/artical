@@ -8,11 +8,11 @@ module.exports = function* updateOwnArticle(req, res, next) {
 
 	const {abstract, content} = req.body;
 
-	if (!abstract || abstract === '' && content) {
+	if ((!abstract || abstract === '') && (content !== '' && content)) {
 		req.body.abstract = getAbstract(content);
 	}
 
-	if (content) {
+	if (content && content !== '' ) {
 		req.body.thumbnail = yield getThumbnail(content);
 	}
 
