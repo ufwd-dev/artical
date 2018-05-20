@@ -3,7 +3,19 @@
 const {ImageRepository} = require('sharp-repo');
 const {FileStoreAdapter} = require('sharp-repo/src/store/file');
 
-const filePath = process.cwd();
+const {config} = require('lemonitor-service');
+const fs = require('fs-extra');
+const path = require('path');
+
+config.read();
+
+config.setPath('htdocs', config.get('server.htdocs'));
+
+const filePath = config.getPath('htdocs');
+
+fs.ensureDirSync(path.resolve(filePath, 'figureRepo'));
+
+fs.ensureDirSync(path.resolve(filePath, 'thumbnailRepo'));
 
 const imageStore = new FileStoreAdapter({
 	root:  `${filePath}/figureRepo`

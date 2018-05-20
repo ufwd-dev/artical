@@ -19,9 +19,12 @@ const {
 	deleteOwnSubscribe,
 	getChannelList,
 	getChannel,
+	getThumbnailUrlList
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
+
+router.get('/thumbnail', getThumbnailUrlList);
 
 router.get('/article', $testQuery({
 	properties: {
