@@ -125,6 +125,9 @@ app:
 ## DELETE /api/ufwd/app/channel/:cid
 用户取消对某个频道的关注 
 
+## GET /api/ufwd/service/category?symbol=string
+按代号获取文章类别列表
+
 ## GET /api/ufwd/app/article?keyword=string&favorite=boolean&like=boolean&channel=int
 查看所有的文章
 

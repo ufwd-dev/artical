@@ -13,13 +13,14 @@ const Category = sequelize.define('ufwdCategory', {
 	description: {
 		type: Sequelize.TEXT,
 		allowNull: false
+	},
+	symbol: {
+		type: Sequelize.STRING
 	}
 });
 
 const Classification = sequelize.define('ufwdCategoryHasArticle', {
 
-}, {
-	paranoid: true
 });
 
 module.exports = { Category, Classification };

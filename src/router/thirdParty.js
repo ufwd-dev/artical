@@ -24,8 +24,6 @@ const {
 	getClassificationList,
 	getAccountInformation,
 	uploadImage,
-	getImage,
-	getThumbnail
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
@@ -68,7 +66,3 @@ router.get('/noop', (req, res, next) => {
 });
 
 router.post('/image', fileUpload(), uploadImage);
-
-router.get('/image/:hash/regular/:regularName', getImage);
-
-router.get('/thumbnail/:hash/regular/:regularName', getThumbnail);

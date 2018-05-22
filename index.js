@@ -18,5 +18,5 @@ appendEntry('bundle', path.resolve(__dirname, './app'));
 const service = require('lemonitor-service');
 
 service.extend((app) => {
-	app.use('/api/ufwd', router);
+	app.use(router);
 });

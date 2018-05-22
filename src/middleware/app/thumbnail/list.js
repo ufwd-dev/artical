@@ -25,7 +25,7 @@ module.exports = function* getThumbnailUrlList(req, res, next) {
 	const urlList = [];
 
 	articleList.forEach(article => {
-		urlList.push(`http://${domain}:${port}/api/ufwd/service/release/image/${article.thumbnail}/regular/common`);
+		urlList.push(`http://${domain}:${port}/static/ufwd/image/${article.thumbnail}/regular/common`);
 	});
 
 	res.data(urlList);

@@ -2,6 +2,9 @@
 
 module.exports = function uploadImage(req, res, next) {
 	const content = req.body.data.data;
+	const {config} = require('lemonitor-service');
+	const domain = config.get('server.domain');
+	const port = config.get('server.protocol.http.port');
 
 	const imageBuffer = new Buffer(content);
 
@@ -12,7 +15,7 @@ module.exports = function uploadImage(req, res, next) {
 	const hash = entry.meta.hash;
 
 	res.data({
-		hash
+		default: `http://${domain}:${port}/static/ufwd/image/${hash}/regular/common`
 	});
 	
 	next();
