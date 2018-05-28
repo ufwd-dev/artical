@@ -20,7 +20,10 @@ const {
 	getChannelList,
 	getChannel,
 	getThumbnailUrlList,
-	getCategoryList
+	getCategoryList,
+	getArticleListBySymbol,
+	getArticleFavorite,
+	getArticleLike
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
@@ -62,11 +65,24 @@ router.get('/article/:articleId/content', getArticleContent);
 
 router.get('/category/:categoryId/article', getAccountClassification);
 
+router.get('/symbol/article', $testQuery({
+	properties: {
+		value: {
+			type: 'string'
+		}
+	},
+	additionalProperties: false
+}), getArticleListBySymbol);
+
 router.post('/article/:articleId/favorite', getAccountArticle, createFavorite);
+
+router.get('/article/:articleId/favorite', getAccountArticle, getArticleFavorite);
 
 router.delete('/account/article/:articleId/favorite', getAccountArticle, deleteFavorite);
 
 router.post('/article/:articleId/like', getAccountArticle, createLike);
+
+router.get('/article/:articleId/like', getAccountArticle, getArticleLike);
 
 router.delete('/account/article/:articleId/like', getAccountArticle, deleteLike);
 

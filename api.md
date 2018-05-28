@@ -108,25 +108,34 @@ service:
 app:
 ======================================
 
-## POST /api/ufwd/app/channel/:cid
+## GET /api/ufwd/app/thumbnail
+前端获得缩略图列表
+```
+{}
+```
+## GET /api/ufwd/app/channel
+用户获取频道列表
+
+## POST /api/ufwd/app/account/channel/:channelId
 用户关注某个频道     
 ```
-{
-    cid:频道的id(int)
-}
+{}
 ```
 
-## GET /api/ufwd/app/channel
+## GET /api/ufwd/app/account/channel
 获得用户关注的所有频道的信息     
 
-## GET /api/ufwd/app/channel/:cid
-获得用户关注的某个频道的信息     
+## GET /api/ufwd/app/channel/:channelId
+获得某个频道的信息     
 
-## DELETE /api/ufwd/app/channel/:cid
+## DELETE /api/ufwd/app/account/channel/:channelId
 用户取消对某个频道的关注 
 
-## GET /api/ufwd/service/category?symbol=string
+## GET /api/ufwd/app/category?symbol=string
 按代号获取文章类别列表
+
+## GET /api/ufwd/app/symbol/article?value=string
+按代号获取文章类别的文章列表
 
 ## GET /api/ufwd/app/article?keyword=string&favorite=boolean&like=boolean&channel=int
 查看所有的文章
@@ -141,10 +150,16 @@ app:
 获取某个分类的所有文章
 
 ## POST /api/ufwd/app/article/:articleId/favorite
-对某个文章进行操作(收藏)
+对某个文章进行操作(点赞)
+
+## GET /api/ufwd/app/article/:articleId/favorite
+查看自己对文章进行的操作(点赞)
 
 ## POST /api/ufwd/app/article/:articleId/like
 对某个文章进行操作(收藏)
+
+## GET /api/ufwd/app/article/:articleId/like
+查看自己对文章进行的操作(收藏)
 
 ## DELETE /api/ufwd/app/account/article/:articleId/favorite
 删除自己对某篇文章的(点赞)
