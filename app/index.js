@@ -29,7 +29,8 @@ import Article from './component/article/Article.vue';
 import Detail from './component/article/Detail.vue';
 import Category from './component/category/Category.vue';
 import CategoryDetail from './component/category/Detail.vue';
-import Writer from './component/Writer.vue';
+import Writer from './component/writer/Writer.vue';
+import AddWriter from  './component/writer/New.vue';
 import Channel from './component/channel/Channel.vue';
 import ChannelDetail from './component/channel/Detail.vue';
 
@@ -60,6 +61,10 @@ app.router.addRoutes([
 			{
 				path: 'writer',
 				component: Writer
+			},
+			{
+				path: 'add-writer',
+				component: AddWriter
 			},
 			{
 				path: 'channel',

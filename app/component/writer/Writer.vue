@@ -16,7 +16,8 @@
 	<data-tables
 		:data="writerList"
 		:search-def="searchDef"
-		:pagination-def="paginationDef">
+		:pagination-def="paginationDef"
+		:actions-def="actionDef">
 		<el-table-column
 			v-for="(column, index) in writerColumns"
 			:key="index"
@@ -27,7 +28,7 @@
 			:width="column.width"
 			:minWidth="column.minWidth">
 		</el-table-column>
-		<!-- <el-table-column
+		<el-table-column
 			label="操作"
 			prop="view"
 			align="center"
@@ -35,9 +36,11 @@
 			<template slot-scope="scope">
 				<el-button
 					type="text"
-					@click="getWriterById(scope.row.id)">查看</el-button>
+					@click="deleteWriter(scope.row.id)">
+						<i class="fa fa-trash" aria-hidden="true"></i>
+					</el-button>
 			</template>
-		</el-table-column> -->
+		</el-table-column>
 	</data-tables>
 
 </div>
@@ -56,18 +59,23 @@ export default {
 			writerList: [],
 			writerColumns: [
 				{
-					label: '作家ID',
-					prop: 'id',
-					width: '200'
-				},
-				{
 					label: '账户ID',
 					prop: 'accountId',
 					width: '200'
 				},
 				{
-					label: '频道ID',
-					prop: 'channelId',
+					label: '姓名',
+					prop: 'name',
+					width: '200'
+				},
+				{
+					label: '频道',
+					prop: 'channelName',
+					minWidth: '200'
+				},
+				{
+					label: '街道',
+					prop: 'street',
 					minWidth: '200'
 				},
 				{
@@ -83,6 +91,20 @@ export default {
 			paginationDef: {
 				pageSize: 10,
 				pageSizes: [5, 10, 20],
+			},
+			actionDef: {
+				colProps: {
+					span: 3
+				},
+				def: [
+					{
+						name: this.$t('ufwd.notification.new'),
+						type: 'primary',
+						handler: () => {
+							this.$router.push('add-writer');
+						}
+					}
+				]
 			}
 		}
 	},
@@ -100,6 +122,18 @@ export default {
 					})
 
 					this.writerList = writerData;
+				})
+		},
+		deleteWriter(id) {
+			return axios.delete(`/api/ufwd/service/writer/${id}`)
+				.then(res => {
+					this.$notify({
+						title: '成功',
+						message: '作家删除成功！',
+						type: 'success'
+					});
+
+					this.getWriter();
 				})
 		}
 	},

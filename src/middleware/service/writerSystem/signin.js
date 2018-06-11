@@ -20,6 +20,8 @@ module.exports = function* writerSignin(req, res, next) {
 		throwError('No Authority', 404);
 	}
 
+	account.token = writer.token;
+
 	res.data(account);
 
 	next();

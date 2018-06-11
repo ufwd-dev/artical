@@ -9,3 +9,9 @@ ufwdArticle:
     category: '分类'
     writer: '作家'
     channel: '频道'
+    addWriter: '创建新作家'
+    create: '创建作家'
+  channel:
+    id: '频道ID'
+    name: '频道名称'
+    description: '频道描述'

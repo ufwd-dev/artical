@@ -117,12 +117,18 @@ router.post('/writer', $testBody({
 		accountId: {
 			type: 'number'
 		},
+		accountList: {
+			type: 'array',
+			items: { 
+				type: 'number'
+			}
+		},
 		channelId: {
 			type: 'number'
 		}
 	},
 	additionalProperties: false,
-	required: ['accountId', 'channelId']
+	required: ['channelId']
 }), isAdminiSignedIn, createWriter);
 
 router.get('/writer', $testQuery({
