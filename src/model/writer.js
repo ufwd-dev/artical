@@ -18,6 +18,4 @@ const Writer = module.exports = sequelize.define('ufwdWriter', {
 		type: Sequelize.UUID,
 		defaultValue: Sequelize.UUIDV4
 	}
-}, {
-	paranoid: true
 });
