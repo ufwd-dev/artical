@@ -118,6 +118,8 @@ export default {
 				});
         },
         handleSelection(val) {
+            this.checkedAccount = [];
+
             val.forEach(element => {
                 this.checkedAccount.push(element.id);
             });
@@ -145,6 +147,9 @@ export default {
                 accountList: this.checkedAccount,
                 channelId: this.checkedChannel
             }).then(res => {
+                this.checkedAccount = [];
+                this.checkedChannel = null;
+
                 this.$notify({
 						title: '成功',
 						message: '作家创建成功！',

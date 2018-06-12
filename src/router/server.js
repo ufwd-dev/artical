@@ -159,8 +159,7 @@ router.delete('/writer/:writerId', isAdminiSignedIn, getWriter, deleteWriter);
 router.post('/channel', $testBody({
 	properties: {
 		name: {
-			type: 'string',
-			minLength: 4
+			type: 'string'
 		},
 		description: {
 			type: 'string'

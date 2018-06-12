@@ -165,6 +165,8 @@ export default {
 				})
 		},
 		getAllArticleList() {
+			this.categoryName = '全部';
+			
 			return axios.get(`${SERVICE_URL}/article`)
 				.then(res => {
 					let articleData = res.data.data;
