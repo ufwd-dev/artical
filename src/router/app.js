@@ -30,6 +30,14 @@ const router = module.exports = require('express').Router();
 
 router.get('/thumbnail', getThumbnailUrlList);
 
+router.get('/noop', (req, res, next) => {
+	res.data({
+		account: req.session.accountId
+	});
+
+	next();
+});
+
 router.get('/category', $testQuery({
 	properties: {
 		symbol: {
