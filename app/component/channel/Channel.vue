@@ -38,7 +38,14 @@
 					<template slot-scope="scope">
 						<el-button
 							type="text"
-							@click="getChannelById(scope.row.id)">查看</el-button>
+							@click="getChannelById(scope.row.id)">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+						</el-button>
+						<el-button type="text"
+							:disabled="scope.row.operable"
+							@click="deleteChannel(scope.row.id)">
+							<i class="fa fa-trash-o" aria-hidden="true"></i>
+						</el-button>
 					</template>
 				</el-table-column>
 			</data-tables>
@@ -149,6 +156,23 @@ export default {
 						message: '频道创建失败。'
 					})
 				})
+		},
+		deleteChannel(id) {
+			return axios.delete(`${CHANNEL_URL}/${id}`)
+				.then(res => {
+					this.$notify({
+						title: '成功',
+						message: '频道删除成功！',
+						type: 'success'
+					});
+
+					this.getChannelList();
+				}).catch(err => {
+					this.$notify.error({
+						title: '失败',
+						message: '频道删除失败。'
+					});
+				});
 		}
 	},
 	mounted() {

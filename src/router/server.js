@@ -183,8 +183,7 @@ router.get('/channel/:channelId', isAdminiSignedIn, getChannel);
 router.put('/channel/:channelId', $testBody({
 	properties: {
 		name: {
-			type: 'string',
-			minLength: 4
+			type: 'string'
 		},
 		description: {
 			type: 'string'
