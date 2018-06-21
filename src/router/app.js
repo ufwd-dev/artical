@@ -23,7 +23,8 @@ const {
 	getCategoryList,
 	getArticleListBySymbol,
 	getArticleFavorite,
-	getArticleLike
+	getArticleLike,
+	getCategoryConfig
 } = require('express-handler-loader')('ufwd_article');
 
 const router = module.exports = require('express').Router();
@@ -103,3 +104,12 @@ router.get('/channel/:channelId', getChannel);
 router.get('/channel', getChannelList);
 
 router.delete('/account/channel/:channelId', getOwnSubscribe, deleteOwnSubscribe);
+
+router.get('/category/levelTwo', $testQuery({
+	properties: {
+		item: {
+			type: 'string'
+		}
+	},
+	additionalProperties: false
+}), getCategoryConfig);
