@@ -1,82 +1,72 @@
 <template>
 
 <div>
-	<nav>
-		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item">
-				<router-link tag="a" to="/">首页</router-link>
-			</li>
-			<li class="breadcrumb-item active">频道</li>
-		</ol>
-	</nav>
+	<b-breadcrumb :items="[
+		{ text: $t('ufwd.home'), href: '#/'},
+		{ text: '频道', active: true },
+	]"/>
+	
+	<h3>频道管理</h3><hr>
+	
+	<b-card title="编辑频道">
+		<b-row>
+			<b-col cols="auto">
+				<b-form-group
+					label="频道名称"
+					style="width: 12em">
+					<b-form-input
+						v-model="form.name" />
+				</b-form-group>
+			</b-col>
+			<b-col>
+				<b-form-group
+					label="频道描述">
+					<b-form-input
+						v-model="form.description" />
+				</b-form-group>
+			</b-col>
+			<b-col cols="auto">
+				<b-form-group
+					label="操作?">
+					<b-btn variant="success"
+						v-if="selectedChannel"
+						@click="updateChannel()">保存</b-btn>
+					<b-btn variant="primary"
+						v-if="!selectedChannel"
+						@click="createChannel()">创建</b-btn>
+					<b-btn variant="danger"
+						@click="reset()">重置</b-btn>
+				</b-form-group>
+			</b-col>
+		</b-row>
+	</b-card>
 
-	<h3>全部频道</h3>
-	<hr>
+	<hr><b-pagination
+		:limit="7"
+		align="right"
+		v-model="currentPage"
+		:total-rows="channelList.length"
+		:per-page="10" />
 
-	<div class="row">
-		<div class="col-sm-9">
-			<data-tables
-				:data="channelList"
-				:search-def="searchDef"
-				:pagination-def="paginationDef"
-				style="margin-top: -20px;">
-				<el-table-column
-					v-for="(column, index) in channelColumns"
-					:key="index"
-					align="center"
-					:label="column.label"
-					:prop="column.prop"
-					:sortable="column.sortable"
-					:width="column.width"
-					:minWidth="column.minWidth">
-				</el-table-column>
-				<el-table-column
-					label="操作"
-					prop="view"
-					align="center"
-					width="140">
-					<template slot-scope="scope">
-						<el-button
-							type="text"
-							@click="getChannelById(scope.row.id)">
-							<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-						</el-button>
-						<el-button type="text"
-							:disabled="scope.row.operable"
-							@click="deleteChannel(scope.row.id)">
-							<i class="fa fa-trash-o" aria-hidden="true"></i>
-						</el-button>
-					</template>
-				</el-table-column>
-			</data-tables>
-		</div>
+	<b-table
+		:fields="[
+			{ key: 'name', label: '名称' },
+			{ key: 'description', label: '描述' },
+			{ key: 'created_at', label: '创建时间' },
+		]"
+		:per-page="10"
+		:current-page="currentPage"
+		:items="channelList">
+		
+		<template slot="name" slot-scope="data">
+			<b-btn variant="link" size="sm"
+				@click="openToForm(data.item)">{{data.item.name}}</b-btn>
+		</template>
 
-		<div class="col-sm-3">
-			<el-card class="box-card" shadow="never">
-				<div slot="header">
-					<span>添加新频道</span>
-				</div>
-
-				<el-form :model="channelForm">
-					<el-form-item label="名称" required>
-						<el-input v-model="channelForm.name"></el-input>
-					</el-form-item>
-
-					<el-form-item label="描述" required>
-						<el-input
-							type="textarea"
-							rows="3"
-							v-model="channelForm.description"></el-input>
-					</el-form-item>
-
-					<el-form-item>
-						<el-button type="primary"
-							@click="createChannel()">创建</el-button>
-					</el-form-item>
-				</el-form>
-			</el-card>
-		</div>
-	</div>
+		<template slot="created_at" slot-scope="data">
+			{{data.item.created_at|isoDateTime}}
+		</template>
+	</b-table>
 	
 	
 </div>
@@ -84,95 +74,61 @@
 
 <script>
 import axios from 'axios';
-import DataTables from 'vue-data-tables';
 import dateFormat from 'dateformat';
 
 const CHANNEL_URL = '/api/ufwd/service/channel';
 
 export default {
 	name: 'channel',
-	components: { DataTables },
 	data() {
 		return {
+			currentPage: 1,
+			selectedChannel: null,
 			channelList: [],
-			channelColumns: [
-				{
-					label: '名称',
-					prop: 'name',
-					width: '180'
-				},
-				{
-					label: '描述',
-					prop: 'description',
-					minWidth: '200'
-				},
-				{
-					label: '创建时间',
-					prop: 'created_at',
-					width: '180',
-					sortable: 'custom'
-				}
-			],
-			searchDef: {
-				show: false
+			form: {
+				name: '',
+				description: ''
 			},
-			paginationDef: {
-				pageSize: 10,
-				pageSizes: [5, 10, 20],
-			},
-			channelForm: {},
+		}
+	},
+	filters: {
+		isoDateTime(date) {
+			return dateFormat(date, 'yyyy-mm-dd HH:MM:ss');
 		}
 	},
 	methods: {
 		getChannelList() {
-			return axios.get(CHANNEL_URL)
-				.then(res => {
-					const channelData = res.data.data;
-
-					channelData.forEach(channel => {
-						channel.created_at = dateFormat(channel.created_at, 'yyyy/mm/dd HH:MM');
-					});
-
-					this.channelList = channelData;
-				})
+			return axios.get(CHANNEL_URL).then(res => {
+				this.channelList = res.data.data;
+			});
 		},
-		getChannelById(id) {
-			return this.$router.push(`channel/${id}/detail`);
+		openToForm(channel) {
+			this.selectedChannel = channel;
+
+			this.form.name = channel.name;
+			this.form.description = channel.description;
 		},
 		createChannel() {
-			return axios.post(CHANNEL_URL, this.channelForm)
-				.then(() => {
-					this.$notify({
-						title: '成功',
-						message: '频道创建成功！',
-						type: 'success'
-					});
-
-					this.getChannelList();
-				})
-				.catch(err => {
-					this.$notify.error({
-						title: '失败',
-						message: '频道创建失败。'
-					})
-				})
+			return axios.post(CHANNEL_URL, this.form)
+				.then(this.reset())
+				.then(() => this.getChannelList());
 		},
 		deleteChannel(id) {
 			return axios.delete(`${CHANNEL_URL}/${id}`)
-				.then(res => {
-					this.$notify({
-						title: '成功',
-						message: '频道删除成功！',
-						type: 'success'
-					});
+				.then(() => this.getChannelList());
+		},
+		updateChannel() {
+			return axios.put(`${CHANNEL_URL}/${this.channelId}`, this.form)
+				.then(this.reset())
+				.then(() => this.getChannelList());
+		},
+		reset() {
+			this.form = {
+				name: '',
+				description: ''
+			};
 
-					this.getChannelList();
-				}).catch(err => {
-					this.$notify.error({
-						title: '失败',
-						message: '频道删除失败。'
-					});
-				});
+			this.selectedChannel = null;
 		}
 	},
 	mounted() {

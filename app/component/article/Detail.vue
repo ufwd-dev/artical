@@ -1,61 +1,56 @@
 <template>
+	<div>
+		<b-breadcrumb :items="[
+			{ text: $t('ufwd.home'), href: '#/'},
+			{ text: '文章列表', href: '#/ufwd/article/artical/list'},
+			{ text: article.title, active: true },
+		]"/>
 
-<div>
-	<nav>
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item">
-				<router-link tag="a"
-					to="/">首页</router-link>
-			</li>
-			<li class="breadcrumb-item">
-				<router-link tag="a"
-					to="/ufwd/article/list">文章列表</router-link>
-			</li>
-			<li class="breadcrumb-item active">{{article.title}}</li>
-		</ol>
-	</nav>
-
-	<div class="row">
-		<div class="col-sm-9">
+		<b-container>
+			<b-btn variant="success"
+				@click="openExamine()">打开审阅</b-btn>
 			<h3 class="text-center">{{article.title}}</h3>
 
 			<ul class="nav nav-justified my-3">
 				<li class="nav-item">来源：原创</li>
-				<li class="nav-item">时间：{{article.created_at}}</li>
+				<li class="nav-item">时间：{{article.created_at|isoDateTime}}</li>
 			</ul>
 
-			<div v-html="article.content"
-				class="article-content"></div>
-		</div>
+			<div v-html="rendererHtml" class="article-content"></div>
 
-		<div class="col-sm-3">
-			<el-card class="box-card" shadow="never">
-				<div slot="header">
-					<span>文章审核</span>
-				</div>
+		</b-container>
 
-				<el-form :model="articleExamineForm">
-					<el-form-item label="审核状态" prop="examine">
-						<el-switch v-model="articleExamineForm.examine"></el-switch>
-					</el-form-item>
+		<b-modal ref="examine" title="审阅窗口" centered>
+			<b-form>
+				<b-form-group
+					label="通过?">
+					<b-form-radio-group
+						buttons
+						button-variant="outline-success"
+						size="sm"
+						v-model="form.examine"
+						:options="[
+							{ text: '是', value: true },
+							{ text: '否', value: false }
+						]" />
+				</b-form-group>
+				<b-form-group
+					label="审查意见">
+					<b-form-textarea
+						v-model="form.comments"
+						rows="7"
+						no-resize
+						size="sm" />
+				</b-form-group>
+			</b-form>
 
-					<el-form-item label="审核意见" prop="comment">
-						<el-input
-							type="textarea"
-							rows="3"
-							v-model="articleExamineForm.comments"></el-input>
-					</el-form-item>
-
-					<el-form-item>
-						<el-button type="primary"
-							@click="updateExamine()">提交</el-button>
-					</el-form-item>
-				</el-form>
-
-			</el-card>
-		</div>
+			<div slot="modal-footer">
+				<b-btn
+					@click="updateExamine()"
+					variant="primary">发送</b-btn>
+			</div>
+		</b-modal>
 	</div>
-</div>
 </template>
 
 <script>
@@ -73,47 +68,43 @@ export default {
 	name: 'article-detail',
 	data() {
 		return {
-			article: [],
-			articleExamineForm: {
+			article: {
+				title: null
+			},
+			form: {
 				examine: null,
 				comments: ''
 			}
 		}
 	},
+	filters: {
+		isoDateTime(date) {
+			return dateFormat(date, 'yyyy-mm-dd HH:MM:ss');
+		}
+	},
 	computed: {
 		articleId() {
 			return this.$route.params.id;
+		},
+		rendererHtml() {
+			return this.article.content && _.unescape(md.render(this.article.content));
 		}
 	},
 	methods: {
+		openExamine() {
+			this.$refs.examine.show();
+		},
 		updateExamine() {
-			return axios.put(`${ARTICLE_URL}/${this.articleId}`, this.articleExamineForm)
-				.then(() => {
-					this.$notify({
-						title: '成功',
-						message: '文章审核成功！',
-						type: 'success'
-					});
-
-					this.$router.go(-1);
-				})
-				.catch(err => {
-					this.$notify.error({
-						title: '失败',
-						message: '文章审核失败。'
-					})
-				})
+			return axios.put(`${ARTICLE_URL}/${this.articleId}`, this.form)
+				.then(() => this.$refs.examine.hide());
 		},
 		getArticle() {
 			return axios.get(`${ARTICLE_URL}/${this.articleId}`)
 				.then(res => {
 					this.article = res.data.data;
 
-					this.articleExamineForm.examine = this.article.examine;
-					this.articleExamineForm.comments = this.article.comments;
-
-					this.article.content = _.unescape(md.render(res.data.data.content));
-					this.article.created_at = dateFormat(this.article.created_at, 'yyyy/mm/dd HH:MM');
+					this.form.examine = this.article.examine;
+					this.form.comments = this.article.comments;
 				})
 		}
 	},
