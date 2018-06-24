@@ -41,7 +41,7 @@ module.exports = function* getServiceArticleList(req, res, next) {
 			};
 		});
 
-		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at']);
+		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at', 'examine']);
 
 		newArticle.category = category;
 

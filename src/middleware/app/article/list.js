@@ -29,7 +29,7 @@ module.exports = function* getAccountArticleList(req, res, next) {
 	const articleList = yield Article.findAll(query);
 
 	const list = articleList.map(article => {
-		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'ufwdAccountOperations', 'view', 'updated_at']);
+		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'ufwdAccountOperations', 'view', 'updated_at', 'examine']);
 
 		return newArticle;
 	});

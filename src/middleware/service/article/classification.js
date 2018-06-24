@@ -33,7 +33,7 @@ module.exports = function* getServiceClassification(req, res, next) {
 
 	const list = categoryList.map(category => {
 
-		const newArticle = _.pick(category.ufwdArticle, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at']);
+		const newArticle = _.pick(category.ufwdArticle, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at', 'examine']);
 
 		return newArticle;
 	});
