@@ -1,8 +1,10 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const _ = require('lodash');
 
 module.exports = function* getServiceArticleList(req, res, next) {
+	const Classification = res.sequelize.model('ufwdCategoryHasArticle');
 	const Article = res.sequelize.model('ufwdArticle');
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const { keyword, examine, favorite, like} = req.query;
@@ -12,6 +14,8 @@ module.exports = function* getServiceArticleList(req, res, next) {
 		},
 		include: [{
 			model: AccountOperation,
+		}, {
+			model: Classification
 		}]
 	};
 	const include = query.include[0];
@@ -24,7 +28,30 @@ module.exports = function* getServiceArticleList(req, res, next) {
 
 	const articleList = yield Article.findAll(query);
 
-	res.data(articleList);
+	const list = articleList.map(article => {
+		const category = article.ufwdCategoryHasArticles.filter(classification => classification.categoryId)
+			.map(classification => classification.categoryId);
+
+		const operation = article.ufwdAccountOperations.map(operation => {
+			return {
+				id: operation.id,
+				favorite: operation.favorite,
+				like: operation.like,
+				accountId: operation.accountId
+			};
+		});
+
+		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at']);
+
+		newArticle.category = category;
+
+		newArticle.operation = operation;
+
+		return newArticle;
+	});
+
+	res.data(list);
 
 	next();
+	
 };

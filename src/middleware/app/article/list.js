@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const _ = require('lodash');
 
 module.exports = function* getAccountArticleList(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
@@ -23,11 +24,17 @@ module.exports = function* getAccountArticleList(req, res, next) {
 	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? true : false), include.accountId = accountId) : undefined;
 	favorite && like ? (include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
 	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
-	channel ? (query.where.channel = channel) : undefined;
+	channel ? (query.where.channel = {[Sequelize.Op.in]: channel.split(',')}) : undefined;
 
 	const articleList = yield Article.findAll(query);
 
-	res.data(articleList);
+	const list = articleList.map(article => {
+		const newArticle = _.pick(article, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'ufwdAccountOperations', 'view', 'updated_at']);
+
+		return newArticle;
+	});
+
+	res.data(list);
 
 	next();
 };

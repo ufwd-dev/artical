@@ -7,6 +7,8 @@ require('ufwd-system');
 
 require('./src/model');
 
+require('./src/timer');
+
 require('express-handler-loader')('ufwd_article', {
 	pathname: path.resolve(__dirname, './src/middleware')
 });

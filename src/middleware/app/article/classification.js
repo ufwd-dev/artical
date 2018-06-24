@@ -1,6 +1,7 @@
 'use strict';
 
 const {throwError} = require('error-standardize');
+const _ = require('lodash');
 
 module.exports = function* getAccountClassification(req, res, next) {
 	const Classification = res.sequelize.model('ufwdCategoryHasArticle');
@@ -32,7 +33,14 @@ module.exports = function* getAccountClassification(req, res, next) {
 		}]
 	});
 
-	res.data(articleList);
+	const list = articleList.map(category => {
+
+		const newArticle = _.pick(category.ufwdArticle, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at']);
+
+		return newArticle;
+	});
+	
+	res.data(list);
 
 	next();
 };

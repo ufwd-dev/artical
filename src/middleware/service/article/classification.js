@@ -1,6 +1,7 @@
 'use strict';
 
 const {throwError} = require('error-standardize');
+const _ = require('lodash');
 
 module.exports = function* getServiceClassification(req, res, next) {
 	const Classification = res.sequelize.model('ufwdCategoryHasArticle');
@@ -18,7 +19,7 @@ module.exports = function* getServiceClassification(req, res, next) {
 		throwError('The category is not existed.', 404);
 	}
 
-	const articleList = yield Classification.findAll({
+	const categoryList = yield Classification.findAll({
 		where: {
 			categoryId
 		},
@@ -29,8 +30,15 @@ module.exports = function* getServiceClassification(req, res, next) {
 			}
 		}]
 	});
+
+	const list = categoryList.map(category => {
+
+		const newArticle = _.pick(category.ufwdArticle, ['id', 'title', 'abstract', 'author', 'channel', 'created_at', 'thumbnail', 'view', 'updated_at']);
+
+		return newArticle;
+	});
 	
-	res.data(articleList);
+	res.data(list);
 
 	next();
 };
