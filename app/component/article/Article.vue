@@ -9,7 +9,7 @@
 	<b-row>
 		<b-col cols="auto">
 			<b-form-select
-				v-model="selectedCategory"
+				v-model="selectedCategoryId"
 				:options="categoryOptions">
 				<template slot="first">
 					<option :value="null">全部</option>
@@ -22,7 +22,7 @@
 				:limit="7"
 				align="right"
 				v-model="currentPage"
-				:total-rows="articleList.length"
+				:total-rows="totalRows"
 				:per-page="10" />
 		</b-col>
 	</b-row>
@@ -33,6 +33,8 @@
 			{ key: 'title', label: '标题' },
 			{ key: 'created_at', label: '创建时间' },
 		]"
+		@filtered="updateTotalRows"
+		:filter="filter"
 		:current-page="currentPage"
 		:per-page="10"
 		:items="articleList">
@@ -62,7 +64,8 @@ export default {
 	name: 'ufwd-article',
 	data() {
 		return {
-			selectedCategory: null,
+			totalRows: 0,
+			selectedCategoryId: null,
 			currentPage: 1,
 			articleList: [],
 			categoryList: [],
@@ -84,6 +87,16 @@ export default {
 		}
 	},
 	methods: {
+		updateTotalRows(filteredItems) {
+			this.totalRows = filteredItems.length;
+		},
+		filter(item) {
+			if (this.selectedCategoryId === null) {
+				return true;
+			}
+			
+			return item.category.includes(this.selectedCategoryId);
+		},
 		getCategoryList() {
 			return axios.get(`${SERVICE_URL}/category`)
 				.then(res => this.categoryList = res.data.data);
