@@ -2,39 +2,49 @@
 
 const {throwError} = require('error-standardize');
 const Sequelize = require('sequelize');
+const config = require('./config.json');
 
 module.exports = function* getArticleListBySymbol(req, res, next) {
 	const symbolValue = req.query.value;
+	const {highLevel} = req.query;
+
+	const queryParams = [];
+
+	symbolValue ? queryParams.push(symbolValue) : undefined;
+
+	config[highLevel] ? config[highLevel].forEach(item => {
+		queryParams.push(item.name);
+	}) : undefined;
 
 	const Article = res.sequelize.model('ufwdArticle');
 	const Category = res.sequelize.model('ufwdCategory');
 	const Classification = res.sequelize.model('ufwdCategoryHasArticle');
 	
-	const categoryId = [];
-
-
 	const categoryList = yield Category.findAll({
 		where: {
-			symbol: symbolValue
+			symbol: {
+				[Sequelize.Op.in]: queryParams
+			}
 		}
 	});
 
-	categoryList.forEach(category => {
-		categoryId.push(category.id);
-	});
+	const list = categoryList.map(category => category.id);
 
 	const articleList = yield Classification.findAll({
 		where: {
 			categoryId: {
-				[Sequelize.Op.or]: categoryId
+				[Sequelize.Op.in]: list
 			}
 		},
 		include: [{
 			model: Article,
 			where: {
 				published: true,
-				examine: true
-			},
+				examine: true,
+				thumbnail: {
+					[Sequelize.Op.not]: null
+				}
+			}
 		}],
 		attributes: ['categoryId'],
 		group:'articleId',

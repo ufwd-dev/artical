@@ -7,24 +7,48 @@ module.exports = function* getAccountArticleList(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
 	const AccountOperation = res.sequelize.model('ufwdAccountOperation');
 	const accountId = req. session.accountId;
-	const { keyword, favorite, like, channel} = req.query;
+	const { keyword, favorite, like, channel, offset, limit} = req.query;
+
+	const acticleWhere = {
+		published: true,
+		examine: true
+	};
+
+	const opWhere = {};
 
 	const query = {
-		where:{
-			published: true,
-			examine: true
-		},
+		where: acticleWhere,
 		include: [{
 			model: AccountOperation,
-		}]
+			where: favorite || like ? opWhere : null
+		}],
+		order: [['created_at', 'desc']]
 	};
-	const include = query.include[0];
+	const include = query.include[0].where;
 
-	keyword ? (query.where.title = {[Sequelize.Op.like]: `%${keyword}%`}) : undefined;
-	favorite ? (include.where = {}, include.where.favorite = (favorite === 'true' ? true : false), include.accountId = accountId) : undefined;
-	favorite && like ? (include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
-	!favorite && like ? (include.where = {}, include.where.like = (like === 'true' ? true : false), include.accountId = accountId) : undefined;
-	channel ? (query.where.channel = {[Sequelize.Op.in]: channel.split(',')}) : undefined;
+	Object.assign(acticleWhere, keyword ? {
+		title: {
+			[Sequelize.Op.like]: `%${keyword}%`
+		}
+	} : undefined, channel ? {
+		channel:{
+			[Sequelize.Op.in]: channel ? channel.split(',') : undefined
+		}
+	} : undefined);
+
+	Object.assign(query, {
+		offset: offset ? offset - 0 : undefined
+	}, {
+		limit: limit ?  limit - 0  : undefined
+	});
+
+	include ? Object.assign(include, favorite ? {
+		favorite: favorite === 'true' ? true : false,
+	} : undefined, like ? {
+		like: like === 'true' ? true : false
+	} : undefined, {
+		accountId,
+	}) : undefined;
 
 	const articleList = yield Article.findAll(query);
 

@@ -1,83 +1,29 @@
 {
     "闻资讯": [
         {
-            "name": "学习统战知识",
+            "name": "民族宗教",
             "categoryList": [],
             "thumbnail": null
         },
         {
-            "name": "文化艺术",
+            "name": "非公经济",
             "categoryList": [],
             "thumbnail": null
         },
         {
-            "name": "新闻中心",
+            "name": "党外人才",
             "categoryList": [],
             "thumbnail": null
         },
         {
-            "name": "人才中心",
+            "name": "港澳台海",
             "categoryList": [],
             "thumbnail": null
         },
         {
-            "name": "中央市委区委主要会议文件精神",
+            "name": "新阶层",
             "categoryList": [],
             "thumbnail": null
-        }
-    ],
-    "文化站": [
-        {
-            "name": "多党合作1",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "民族宗教2",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "非公经济3",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "党外人才4",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "港澳台海5",
-            "categoryList": [],
-            "thumbnail": ""
-        }
-    ],
-    "微课堂": [
-        {
-            "name": "多党合作2",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "民族宗教3",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "非公经济4",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "党外人才5",
-            "categoryList": [],
-            "thumbnail": ""
-        },
-        {
-            "name": "港澳台海6",
-            "categoryList": [],
-            "thumbnail": ""
         }
     ]
 }

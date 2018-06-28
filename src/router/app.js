@@ -63,6 +63,14 @@ router.get('/article', $testQuery({
 		},
 		channel: {
 			type: 'string'
+		},
+		offset: {
+			type: 'string',
+			pattern: '^([0-9]{1,})$'
+		},
+		limit: {
+			type: 'string',
+			pattern: '^([0-9]{1,})$'
 		}
 	},
 	additionalProperties: false
@@ -72,11 +80,26 @@ router.get('/article/:articleId', getAccountArticle);
 
 router.get('/article/:articleId/content', getArticleContent);
 
-router.get('/category/:categoryId/article', getAccountClassification);
+router.get('/category/:categoryId/article',  $testQuery({
+	properties: {
+		offset: {
+			type: 'string',
+			pattern: '^([0-9]{1,})$'
+		},
+		limit: {
+			type: 'string',
+			pattern: '^([0-9]{1,})$'
+		}
+	},
+	additionalProperties: false
+}), getAccountClassification);
 
 router.get('/symbol/article', $testQuery({
 	properties: {
 		value: {
+			type: 'string'
+		},
+		highLevel: {
 			type: 'string'
 		}
 	},

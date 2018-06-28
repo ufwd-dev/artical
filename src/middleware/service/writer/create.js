@@ -1,6 +1,7 @@
 'use strict';
 
 const {throwError} = require('error-standardize');
+const Sequelize = require('sequelize');
 
 module.exports = function* createWriter(req, res, next) {
 	const UfwdAccount = res.sequelize.model('ufwdAccount');
@@ -42,27 +43,45 @@ module.exports = function* createWriter(req, res, next) {
 	}
 
 	if (accountList) {
-		for (let i = 0; i < accountList.length; i++) {
-			const ufwdAccount = yield UfwdAccount.findOne({
-				where: {
-					accountId: accountList[i],
-					examine: true
-				}
-			});
-		
-			if (!ufwdAccount) {
-				throwError('The account is not exist.', 404);
-			}
-	
-			const writer = yield UfwdWriter.findOrCreate({
-				where: {
-					accountId: accountList[i],
-					channelId: channelId
-				}
-			});
 
-			newWriter.push(writer);
-		}
+		const ufwdAccountList = yield UfwdAccount.findAll({
+			where: {
+				accountId: {
+					[Sequelize.Op.in]: accountList
+				},
+				examine: true
+			}
+		});
+
+		const existedAccountList = ufwdAccountList.map(account => account.accountId);
+
+		const writerList = yield UfwdWriter.findAll({
+			where: {
+				accountId: {
+					[Sequelize.Op.in]: existedAccountList
+				},
+				channelId
+			}
+		});
+
+		const writer = writerList.map(writer => writer.accountId);
+
+		const createWriter = existedAccountList.filter(account => {
+			let isFilter = true;
+
+			if (writer.indexOf(account) !== -1) {
+				isFilter = false;
+			}
+
+			return isFilter;
+		}).map(account => {
+			return {
+				accountId: account,
+				channelId
+			};
+		});
+
+		newWriter = yield UfwdWriter.bulkCreate(createWriter);
 	}
 
 	res.data(newWriter);

@@ -8,6 +8,7 @@ module.exports = function* getAccountClassification(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
 	const Category = res.sequelize.model('ufwdCategory');
 	const categoryId = req.params.categoryId;
+	const { offset, limit} = req.query;
 
 	const category = yield Category.findOne({
 		where: {
@@ -24,13 +25,15 @@ module.exports = function* getAccountClassification(req, res, next) {
 			categoryId
 		},
 		include: [{
-
 			model: Article,
 			where: {
 				published: true,
 				examine: true
 			}
-		}]
+		}],
+		offset: offset ? offset - 0 : undefined,
+		limit: limit ? limit - 0 : undefined,
+		order: [['created_at', 'desc']]
 	});
 
 	const list = articleList.map(category => {
