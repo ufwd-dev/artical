@@ -2,7 +2,7 @@
 
 const {throwError} = require('error-standardize');
 
-module.exports = function* getAccountArticle(req, res, next) {
+module.exports = function* getArticle(req, res, next) {
 	const Article = res.sequelize.model('ufwdArticle');
 	const articleId = req.params.articleId;
 	const _ = require('lodash');
@@ -18,10 +18,6 @@ module.exports = function* getAccountArticle(req, res, next) {
 	if (!article) {
 		throwError('The article is not existed.', 404);
 	}
-
-	yield article.update({
-		view: article.view + 1
-	});
 
 	const mixedArticle = _.pick(article, [
 		'id', 'title', 'content', 'created_at', 'abstract', 'view', 'channel'

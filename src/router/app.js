@@ -7,6 +7,7 @@ const {
 const {
 	getAccountArticleList,
 	getAccountArticle,
+	getArticle,
 	getArticleContent,
 	createFavorite,
 	deleteFavorite,
@@ -106,17 +107,17 @@ router.get('/symbol/article', $testQuery({
 	additionalProperties: false
 }), getArticleListBySymbol);
 
-router.post('/article/:articleId/favorite', getAccountArticle, createFavorite);
+router.post('/article/:articleId/favorite', getArticle, createFavorite);
 
-router.get('/article/:articleId/favorite', getAccountArticle, getArticleFavorite);
+router.get('/article/:articleId/favorite', getArticle, getArticleFavorite);
 
-router.delete('/account/article/:articleId/favorite', getAccountArticle, deleteFavorite);
+router.delete('/account/article/:articleId/favorite', getArticle, deleteFavorite);
 
-router.post('/article/:articleId/like', getAccountArticle, createLike);
+router.post('/article/:articleId/like', getArticle, createLike);
 
-router.get('/article/:articleId/like', getAccountArticle, getArticleLike);
+router.get('/article/:articleId/like', getArticle, getArticleLike);
 
-router.delete('/account/article/:articleId/like', getAccountArticle, deleteLike);
+router.delete('/account/article/:articleId/like', getArticle, deleteLike);
 
 router.post('/account/channel/:channelId', createOwnSubscribe);
 
