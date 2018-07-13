@@ -50,7 +50,7 @@ module.exports = function* getCategoryConfig(req, res, next) {
 			return article.categoryId === ele.id;
 		});
 
-		if (article.ufwdArticle.thumbnail) {
+		if (article && article.ufwdArticle.thumbnail) {
 			ele.thumbnail = article.ufwdArticle.thumbnail;
 		}
 
