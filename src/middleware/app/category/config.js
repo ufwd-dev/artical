@@ -40,7 +40,6 @@ module.exports = function* getCategoryConfig(req, res, next) {
 			attributes: ['thumbnail'],
 			order: [['created_at', 'desc']]
 		}],
-		group:'categoryId',
 		order: [['created_at', 'desc']]
 	});
 
