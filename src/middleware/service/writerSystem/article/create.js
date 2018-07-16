@@ -4,7 +4,7 @@ const getAbstract = require('./utils/abstract');
 const getThumbnail = require('./utils/thumbnail');
 
 module.exports = function* createArticle(req, res, next) {
-	const Article = res.sequelize.model('ufwdArticle');
+	const Article = res.sequelize.model('ufwdArticle'); 
 	const {abstract, content, title, published} = req.body;
 
 	if (abstract === '' || abstract === null) {

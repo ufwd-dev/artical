@@ -1,34 +1,19 @@
 'use strict';
 
-const markdownIt = require('markdown-it');
+const jsdom = require('jsdom');
 const axios = require('axios');
 const sharp = require('sharp');
 
 module.exports = function* getThumbnail(content) {
-	const tokenList = markdownIt().parse(content);
-	let index;
+	const {JSDOM} = jsdom;
 
-	const imageContainer = tokenList.find(token => {
+	const dom = (new JSDOM(content)).window.document;
 
-		if (token.type === 'inline' && token.children !== null) {
-
-			index = token.children.findIndex(element => {
-
-				return element.type ==='image';
-			});
-
-			if (index !== -1) {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	});
+	const imageContainer = dom.querySelector('img');
 	
-	if (imageContainer) {
+	if (imageContainer && imageContainer.src) {
 
-		const url = imageContainer.children[index].attrs[0][1];
-		const imageBuffer = yield axios.get(url, {
+		const imageBuffer = yield axios.get(imageContainer.src, {
 			responseType: 'arraybuffer'
 		});
 

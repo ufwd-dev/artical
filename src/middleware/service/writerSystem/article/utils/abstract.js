@@ -1,21 +1,16 @@
 'use strict';
 
-const markdownIt = require('markdown-it');
+const jsdom = require('jsdom');
 
 module.exports = function getAbstract(content) {
-	const tokenList = markdownIt().parse(content);
+	const {JSDOM} = jsdom;
 
-	const paragraphIndex = tokenList.findIndex((token, index) => {
+	const dom = (new JSDOM(content)).window.document;
 
-		return token.type === 'inline'
-				&& token.children !== null
-				&& token.children.length === 1
-				&& token.children[0].type === 'text'
-				&& tokenList[index - 1].type === 'paragraph_open';
-	});
+	const paragraphContent = dom.querySelector('p').textContent;
 	
-	if (paragraphIndex !== -1) {
+	if (paragraphContent) {
 
-		return tokenList[paragraphIndex].content;
+		return paragraphContent;
 	}
 };
