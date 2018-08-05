@@ -28,8 +28,6 @@ const Subscribe = sequelize.define('ufwdSubscribe', {
 		type: Sequelize.INTEGER,
 		allowNull: false
 	}
-}, {
-	paranoid: true
 });
 
 module.exports = { Channel, Subscribe };
