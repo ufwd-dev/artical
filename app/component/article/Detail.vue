@@ -2,7 +2,7 @@
 	<div>
 		<b-breadcrumb :items="[
 			{ text: $t('ufwd.home'), href: '#/'},
-			{ text: '文章列表', href: '#/ufwd/article/artical/list'},
+			{ text: '文章列表', href: '#/ufwd/article/article/list'},
 			{ text: article.title, active: true },
 		]"/>
 
@@ -96,7 +96,10 @@ export default {
 		},
 		updateExamine() {
 			return axios.put(`${ARTICLE_URL}/${this.articleId}`, this.form)
-				.then(() => this.$refs.examine.hide());
+				.then(() => {
+					this.$refs.examine.hide();
+					this.$router.push('/ufwd/article/article/list');
+				});
 		},
 		getArticle() {
 			return axios.get(`${ARTICLE_URL}/${this.articleId}`)

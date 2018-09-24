@@ -44,7 +44,7 @@
 		</template>
 
 		<template slot="title" slot-scope="data">
-			<a :href="`#/ufwd/article/artical/${data.item.id}`">{{data.item.title}}</a>
+			<a :href="`#/ufwd/article/article/${data.item.id}`">{{data.item.title}}</a>
 		</template>
 
 		<template slot="created_at" slot-scope="data">
