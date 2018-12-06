@@ -7,10 +7,14 @@ module.exports = function getAbstract(content) {
 
 	const dom = (new JSDOM(content)).window.document;
 
-	const paragraphContent = dom.querySelector('p').textContent;
+	let paragraphContent;
+
+	if (dom.querySelector('p')) {
+		paragraphContent = dom.querySelector('p').textContent;
+	}
 	
 	if (paragraphContent) {
 
-		return paragraphContent;
+		return paragraphContent; 
 	}
 };
